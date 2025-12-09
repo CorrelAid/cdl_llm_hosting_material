@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>LLM-Hosting</title>
-        <meta name="robots" content="noindex">
+        <title>Über das Material - LLM-Hosting</title>
 
 
         <!-- Custom HTML head -->
@@ -175,181 +174,7 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="einleitung-überblick-und-definitionen"><a class="header" href="#einleitung-überblick-und-definitionen">Einleitung, Überblick und Definitionen</a></h1>
-<p>Dieses Material entstand auf der Grundlage eines Vortrags<sup class="footnote-reference" id="fr-1-1"><a href="#footnote-1">1</a></sup> über Self-Hosting von LLMs, der auf dem <a href="https://www.youtube.com/watch?v=exOeJCLcuHQ">Datenfestival</a> des <a href="https://civic-data.de/">Civic Data Lab</a> gehalten wurde. Es soll den Vortrag zugänglicher machen, umfassend über das Thema informieren und einen praxisorientierten Überblick geben.</p>
-<p>Unter Self-Hosting wird der auf unterschiedlichen Leveln eigenständige Betrieb von Infrastruktur verstanden, auf der in diesem Fall LLMs und mit diesen zusammenhängende Software läuft.</p>
-<h2 id="was-ist-ein-llm"><a class="header" href="#was-ist-ein-llm">Was ist ein LLM?</a></h2>
-<p>LLMs (Large Language Models) sind große neuronale Sprachmodelle. Sie basieren auf neuronalen Netzwerken – mathematischen Strukturen, die aus vielen miteinander verbundenen Schichten bestehen. Diese Modelle werden durch die Anpassung von Millionen oder sogar Milliarden von Parametern trainiert, die zusammen mit der Modellarchitektur das fertige Modell definieren.</p>
-<p>Die Textgenerierung erfolgt durch zahlreiche Matrizenrechnungen, die sich besonders effizient auf spezialisierter Hardware wie GPUs ausführen lassen. <strong>Open-Weight-Modelle</strong> sind als Dateien verfügbar, die sowohl die Architektur als auch die trainierten Parameter eines Modells enthalten – sie können daher selbst gehostet werden.</p>
-<p>Im Kapitel <a href="#models">Open LLMs</a> wird detailliert beschrieben, wo man Modelle findet und wie man diese vergleichen kann.</p>
-<h2 id="worauf-wird-selbst-gehostet"><a class="header" href="#worauf-wird-selbst-gehostet">Worauf wird selbst gehostet?</a></h2>
-<p>Self-Hosting kann an verschiedenen Orten erfolgen:</p>
-<ul>
-<li><strong>Lokal (On-Premises)</strong>: Betrieb auf dem eigenen Laptop oder auf dedizierten Servern, die in den Räumlichkeiten einer Organisation oder Privatperson stehen. Volle Kontrolle, aber auch volle Verantwortung für Hardware und Wartung.</li>
-<li><strong>Cloud</strong>: Server werden in verschiedenen Formen von Cloud-Providern zur Miete angeboten – entweder als virtualisierte Maschine (VM) oder als dedizierte physische Maschine (Bare Metal). Flexibel skalierbar, aber mit laufenden Kosten.</li>
-<li><strong>Hybrid (Co-Hosting)</strong>: Kauf eigener Server, die jedoch in den Räumen eines Cloud-Providers betrieben und gewartet werden. Kombination aus Eigentum und professioneller Infrastruktur.</li>
-</ul>
-<p>Im Kapitel <a href="#hosting-infrastruktur">Hosting-Infrastruktur</a> werden diese Möglichkeiten und ihre spezifischen Anforderungen für LLMs detailliert verglichen.</p>
-<h2 id="was-wird-selbst-gehostet"><a class="header" href="#was-wird-selbst-gehostet">Was wird selbst gehostet?</a></h2>
-<p>Im Falle des Self-Hostings von LLM-Systemen stellt sich die Frage, welche Komponenten man selbst betreiben will. Hier lässt sich zwischen <strong>Frontend</strong> und <strong>Backend</strong> unterscheiden:</p>
-<p><strong>Frontend</strong>: Meistens ein Chat Interface, über das Nutzer:innen mit dem LLM interagieren.</p>
-<p><strong>Backend</strong>: Umfasst mehrere Komponenten:</p>
-<ul>
-<li><strong>Inference-Server</strong>: Software, auf der ein LLM betrieben wird. Auf solchen Servern können sowohl generative LLMs als auch Embedding-Modelle betrieben werden.</li>
-<li><strong>Vektor-Datenbank</strong>: Wird für RAG (Retrieval-Augmented Generation) benötigt. RAG ergänzt informationsbezogene Anfragen an das LLM mit relevanten Dokumenten aus einem Suchschritt mithilfe einer Datenbank.</li>
-<li><strong>API Gateway</strong>: Verwaltet und standardisiert den Zugriff auf die verschiedenen Backend-Dienste</li>
-<li>Zusätzliche Dienste wie Authentifizierung und Dateipeicher</li>
-</ul>
-<p><strong>RAG im Detail</strong>: Bei RAG wird semantische Suche verwendet. Dabei verarbeitet ein Embedding-Modell Texte zu sogenannten Embeddings. Embeddings sind Vektore, die den Textinhalt in numerischer Form repräsentieren. Diese Embeddings ermöglichen es, inhaltlich ähnliche Dokumente zu finden und dem LLM als Kontext bereitzustellen.</p>
-<p><strong>Fig. 1</strong> bietet einen graphischen Überblick über die Komponenten und deren Zusammenspiel:</p>
-<pre class="mermaid">---
-title: "Fig. 1: Komponenten von LLM-Systemen"
----
-flowchart TB
-    subgraph Frontend
-        UI[Chat Interface]
-    end
-
-    subgraph Backend
-        direction TB
-        subgraph InferenceLayer[Inference Layer]
-            LLMServer[Inference-Server&lt;br/&gt;für LLM]
-            EmbedServer[Inference-Server&lt;br/&gt;für Embedding-Modell]
-        end
-
-        subgraph DataStorage[Datenschicht]
-            VectorDB[(Vektor-Datenbank)]
-        end
-
-        subgraph Additional[Zusätzliche Komponenten]
-            Tools[Tools]
-            Gateway[API Gateway]
-        end
-    end
-
-    UI --&gt;|Anfragen| Gateway
-    Gateway --&gt;|Routen| LLMServer
-
-    UI -.-&gt;|RAG Workflow| LLMServer
-    LLMServer -.-&gt;|Suchanfrage| EmbedServer
-    EmbedServer -.-&gt;|Embeddings| VectorDB
-    VectorDB -.-&gt;|Relevante Dokumente| LLMServer
-
-    Tools --&gt;|Erweiterte Funktionen| LLMServer
-</pre>
-
-<hr>
-<ol class="footnote-definition">
-<li id="footnote-1">
-<p>Die Slides des Vortrags lassen sich <a href="https://correlaid.github.io/datenfestival_ap3_session/">hier</a> finden, begleitender Code <a href="https://github.com/CorrelAid/datenfestival_ap3_session">hier</a>. <a href="#fr-1-1">↩</a></p>
-</li>
-</ol>
-<div style="break-before: page; page-break-before: always;"></div>
-<h1 id="models"><a class="header" href="#models">Models</a></h1>
-<h2 id="open-vs-open-source"><a class="header" href="#open-vs-open-source">Open vs Open Source</a></h2>
-<h2 id="lizenzen"><a class="header" href="#lizenzen">Lizenzen</a></h2>
-<h2 id="quantisierung"><a class="header" href="#quantisierung">Quantisierung</a></h2>
-<h2 id="hugging-face"><a class="header" href="#hugging-face">Hugging Face</a></h2>
-<h2 id="metriken"><a class="header" href="#metriken">Metriken</a></h2>
-<ul>
-<li>LLM language benchmark</li>
-<li>bezogen auf tasks</li>
-<li>humanities last exam</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div>
-<h1 id="hosting-infrastruktur"><a class="header" href="#hosting-infrastruktur">Hosting-Infrastruktur</a></h1>
-<p>LLMs lassen sich fast auf allen Arten von Infrastuktur betreiben, sogar auf Raspberry Pis. Die mögliche Geschwindigkeit, Qualität und Länge des In- und Outputs kann sich dabei jedoch stark unterscheiden. Andere Vergleichsaspekte sind Kosten sowie damit zusammenhängend Strom- und Wasserverbrauch.</p>
-<ul>
-<li>
-<p>CPU vs GPU</p>
-</li>
-<li>
-<p>Vor allem Nvidia relevant, aber AMD zieht nach</p>
-</li>
-<li>
-<p>GPU VRAM Größen (H200 max) und Generationen (ältere Generationen können Modelle nicht in aktuellen Datentypen/Quantisierungsstufen betreiben)</p>
-</li>
-<li>
-<p>Wasser vs Luftkühlug</p>
-<ul>
-<li>Hetzer nur Luftkühlung</li>
-<li>Wasser verdampft bei Wasserkühlung (unterschiedliche Effiziengrade)</li>
-<li>Intransparente Situation</li>
-<li>Link Mistral LCA</li>
-</ul>
-</li>
-<li>
-<p>Strompreis bei lokalem Vertrieb langfristier Haupt-Kostenpunkt</p>
-</li>
-<li>
-<p>Cloud</p>
-<ul>
-<li>dedicated GPU-Server (Hetzner, Scaleway) vs serverless (Modal, Beam Cloud)</li>
-</ul>
-</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div>
-<h1 id="hosting-software"><a class="header" href="#hosting-software">Hosting-Software</a></h1>
-<ul>
-<li>many active open source solutions</li>
-</ul>
-<p><strong>Fig. 1</strong> zeigt ein konkretes Beispiel: Parrotpark<sup class="footnote-reference" id="fr-1-1-1"><a href="#footnote-1-1">1</a></sup>, ein komplett self-gehostetes LLM-System. Die Infrastruktur besteht aus zwei Servern:</p>
-<ul>
-<li><strong>Eingangsserver</strong>: Permanenter Server, der Proxy, Datenbanken und einen Scheduler hostet</li>
-<li><strong>Ephemerer GPU Server</strong>: Wird vom Scheduler regelmäßig neu erstellt und hostet die rechenintensiven LLM-Komponenten</li>
-</ul>
-<p>Während nicht jedes Self-Hosting Setup so komplex sein muss, zeigt dieses Beispiel die verschiedenen Komponenten einer Komplettlösung.</p>
-<p><strong>Konkrete Software-Komponenten in Parrotpark</strong>:</p>
-<ul>
-<li><strong>Chat Interface</strong>: <a href="https://www.librechat.ai/">LibreChat</a></li>
-<li><strong>Inference-Server</strong>: <a href="https://docs.vllm.ai/en/latest/">vLLM</a> (für generatives LLM und Embedding-Modell)</li>
-<li><strong>Vektor-Datenbank</strong>: <a href="https://github.com/pgvector/pgvector">pgvector</a></li>
-<li><strong>API Gateway</strong>: <a href="https://www.litellm.ai/">LiteLLM</a> – ermöglicht mehr Kontrolle (z.B. Token-Verwaltung) und standardisiert die API</li>
-<li><strong>Authentifizierung</strong>: Keycloak für User-Verwaltung und SSO (Single Sign-On)</li>
-<li><strong>Anwendungsdatenbank</strong>: Speichert Chatverläufe und Nutzereinstellungen für LibreChat und LiteLLM</li>
-<li><strong>Proxy</strong>: Caddy – regelt SSL-Verschlüsselung für HTTPS und leitet Anfragen weiter</li>
-<li>S3-Buckets für Dateispeicherung, Scheduler für automatische Server-Verwaltung</li>
-</ul>
-<pre class="mermaid">---
-title: "Fig. 2: Überblick Parrotpark"
-config:
-  flowchart:
-    htmlLabels: false
----
-%%{ init: { 'flowchart': { 'curve': '' } } }%%
-flowchart LR
-
-    subgraph proxy["`**Eingangsserver**`"]
-    direction TB
-      Caddy
-      Databases[&lt;i&gt;Vektor-DB&lt;/i&gt;&lt;br/&gt;&lt;i&gt;Anwendungs-DB&lt;/i&gt;]
-      Scheduler
-    end
-    subgraph gpu["`**Ephemeral GPU Server**`"]
-    direction TB
-      vLLM[vLLM&lt;br/&gt;&lt;i&gt;Inference-Server für gen. &amp; Embedding-Modell&lt;/i&gt;]
-      LiteLLM[LiteLLM&lt;br/&gt;&lt;i&gt;API Gateway&lt;/i&gt;]
-      LibreChat[LibreChat&lt;br/&gt;&lt;i&gt;Chat Interface&lt;/i&gt;]
-    end
-      LibreChat ---|SSO Auth| Keycloak
-
-      buckets[S3 Buckets&lt;br/&gt;&lt;i&gt;Tools&lt;/i&gt;]
-      LibreChat ---|Speicherung| buckets
-
-    LiteLLM &amp; LibreChat --- Databases
-    Caddy --&gt;|Proxy| LiteLLM &amp; LibreChat
-    Scheduler --&gt;|Erstellt periodisch| gpu
-
-</pre>
-
-<hr>
-<ol class="footnote-definition">
-<li id="footnote-1-1">
-<p>Mehr Informationen zu Parrotpark <a href="https://github.com/CorrelAid/parrotpark">hier</a>. <a href="#fr-1-1-1">↩</a></p>
-</li>
-</ol>
-<div style="break-before: page; page-break-before: always;"></div>
-<h1 id="über-das-material"><a class="header" href="#über-das-material">Über das Material</a></h1>
+                        <h1 id="über-das-material"><a class="header" href="#über-das-material">Über das Material</a></h1>
 <p>Die Inhalte dieser Seite wurden von Jonas Stettner (<a href="https://correlaid.org">CorrelAid e.V.</a>, tätig im <a href="https://civic-data.de">Civic Data Lab</a>) erstellt.</p>
 <p>Diese Seite sowie Code und Dateien der Experimente finden sich in einem <a href="https://github.com/CorrelAid/cdl_llm_hosting_material">GitHub Repository</a>.</p>
 <h2 id="lizenz"><a class="header" href="#lizenz">Lizenz</a></h2>
@@ -366,6 +191,9 @@ flowchart LR
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="03-software.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
 
 
                         <div style="clear: both"></div>
@@ -374,6 +202,9 @@ flowchart LR
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="03-software.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
 
             </nav>
 
@@ -420,11 +251,6 @@ flowchart LR
         <script src="mermaid-eefea253.min.js"></script>
         <script src="mermaid-init-ccf746f1.js"></script>
 
-        <script>
-        window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
-        });
-        </script>
 
 
     </div>
