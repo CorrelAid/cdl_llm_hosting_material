@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Open LLMs - LLM-Hosting</title>
+        <title>Alternativen und Vergleich - LLM-Hosting</title>
 
 
         <!-- Custom HTML head -->
@@ -174,55 +174,17 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="open-llms"><a class="header" href="#open-llms">Open LLMs</a></h1>
-<p>Für das Self-Hosting von LLMs stehen zahlreiche Modelle zur Verfügung. Dieses Kapitel gibt einen Überblick über die wichtigsten Aspekte bei der Auswahl und Bewertung von Modellen: von Lizenzfragen über technische Optimierungen bis hin zu Bezugsquellen und Bewertungsmetriken.</p>
-<h2 id="open-vs-open-source"><a class="header" href="#open-vs-open-source">Open vs Open Source</a></h2>
-<p>Im Kontext von Large Language Models wird häufig von “Open-Source-Modellen” gesprochen, obwohl die meisten dieser Modelle technisch gesehen <strong>Open-Weight-Modelle</strong> sind. Der Unterschied ist wichtig:</p>
-<p><strong>Open-Weight-Modelle</strong> stellen die trainierten Modellparameter (Weights) öffentlich zur Verfügung. Nutzer:innen können diese Modelle herunterladen, ausführen und für eigene Zwecke verwenden. Allerdings sind oft weder die Trainingsdaten noch der vollständige Trainingscode verfügbar. Beispiele: Llama (Meta), Mistral (Mistral AI), Qwen (Alibaba).</p>
-<p><strong>Open-Source-Modelle</strong> im engeren Sinne gehen weiter: Sie veröffentlichen nicht nur die Modellparameter, sondern auch die Trainingsdaten, den Trainingscode und die gesamte Entwicklungspipeline. Dies ermöglicht vollständige Reproduzierbarkeit und Transparenz. Beispiele: OLMo (Allen Institute for AI), Pythia (EleutherAI).</p>
-<p>Für Self-Hosting sind beide Varianten geeignet, wobei Open-Weight-Modelle deutlich verbreiteter sind. Die Wahl zwischen beiden hängt davon ab, wie wichtig vollständige Transparenz und Reproduzierbarkeit für den jeweiligen Anwendungsfall sind.</p>
-<h2 id="lizenzen"><a class="header" href="#lizenzen">Lizenzen</a></h2>
-<p>Die Lizenzen von LLMs unterscheiden sich erheblich und haben direkten Einfluss darauf, wie die Modelle genutzt werden dürfen:</p>
-<p><strong>Permissive Lizenzen</strong> (z.B. Apache 2.0, MIT): Erlauben kommerzielle Nutzung, Modifikation und Weiterverbreitung mit minimalen Einschränkungen. Beispiele: Mistral-Modelle, Qwen-Modelle.</p>
-<p><strong>Restriktive Community-Lizenzen</strong>: Erlauben Nutzung und Modifikation, schränken aber kommerzielle Nutzung ein oder verlangen Lizenzgebühren ab einer bestimmten Nutzerzahl. Beispiel: Llama-Modelle haben eine Custom-Lizenz [@meta_llama4_policy], die bei über 700 Millionen monatlichen Nutzern eine separate Vereinbarung erfordert.</p>
-<p><strong>Research-Only-Lizenzen</strong>: Beschränken die Nutzung auf nicht-kommerzielle Forschungszwecke. Solche Modelle eignen sich nicht für produktive Self-Hosting-Szenarien.</p>
-<p>Manche Lizenzen unterscheiden sich auch je nach Land der Nutzer:in. So verbietet Meta die Nutzung von Llama in der EU.
-Vor dem Einsatz eines Modells sollte die Lizenz sorgfältig geprüft werden, insbesondere bei kommerzieller Nutzung oder bei Organisationen mit vielen Nutzer:innen. Die Lizenzen sind in der Regel auf den Modell-Seiten bei Hugging Face oder auf den Websites der Entwickler dokumentiert.</p>
-<h2 id="quantisierung"><a class="header" href="#quantisierung">Quantisierung</a></h2>
-<p>Quantisierung ist eine Technik zur Reduzierung der Modellgröße und des Speicherbedarfs, die für Self-Hosting von zentraler Bedeutung ist.</p>
-<p><strong>Funktionsweise</strong>: Bei der Quantisierung werden die Modellparameter von höherer Präzision (z.B. 16-Bit oder 32-Bit Floating Point) in niedrigere Präzision (z.B. 8-Bit, 4-Bit oder sogar 2-Bit) konvertiert. Dies reduziert den benötigten GPU-Speicher (VRAM) erheblich.</p>
-<p><strong>Auswirkungen</strong>: Ein Modell mit 70 Milliarden Parametern (70B) benötigt in voller Präzision (FP16) etwa 140 GB VRAM. Mit 4-Bit-Quantisierung reduziert sich der Bedarf auf ca. 35 GB – ein Unterschied, der darüber entscheidet, ob ein Modell auf verfügbarer Hardware überhaupt lauffähig ist.</p>
-<p><strong>Trade-offs</strong>: Quantisierung führt zu leichten Qualitätseinbußen bei den Modellantworten. Moderne Quantisierungsmethoden wie GPTQ, AWQ oder GGUF minimieren diese Verluste jedoch stark. In vielen Anwendungsfällen ist der Qualitätsunterschied zwischen 4-Bit und voller Präzision kaum wahrnehmbar, während die Geschwindigkeit deutlich zunimmt.</p>
-<p><strong>Praktische Bedeutung</strong>: Für Self-Hosting sind quantisierte Modelle oft die einzige praktikable Option. Die meisten Inference-Server unterstützen verschiedene Quantisierungsformate, und auf Hugging Face sind bereits quantisierte Versionen beliebter Modelle verfügbar.</p>
-<h2 id="hugging-face"><a class="header" href="#hugging-face">Hugging Face</a></h2>
-<p><a href="https://huggingface.co/">Hugging Face</a> ist die zentrale Plattform für Open-Weight- und Open-Source-LLMs. Sie fungiert als Repository, Community-Hub und Entwicklungsplattform.</p>
-<p><strong>Model Hub</strong>: Tausende von Modellen sind verfügbar, von kleinen spezialisierten Modellen bis zu großen Frontier-Modellen. Jedes Modell verfügt über eine Seite mit Beschreibung, Lizenzinformationen, Nutzungsbeispielen und Download-Links. Filter ermöglichen die Suche nach Modellgröße, Aufgabe, Lizenz und weiteren Kriterien.</p>
-<p><strong>Praktische Nutzung</strong>: Modelle können direkt über die Webseite heruntergeladen oder programmgesteuert über die Hugging Face API bezogen werden. Die meisten Inference-Server können Modelle automatisch von Hugging Face laden, indem lediglich der Modellname angegeben wird (z.B. <code>mistralai/Mistral-7B-Instruct-v0.2</code>).</p>
-<p><strong>Zusätzliche Ressourcen</strong>: Neben Modellen hostet Hugging Face auch Datasets und Spaces (interaktive Demos). Die Plattform bietet umfangreiche Dokumentation und eine aktive Community, die bei Fragen hilft.</p>
-<p><strong>Alternativen</strong>: Während Hugging Face die dominante Plattform ist, gibt es Alternativen wie ModelScope (chinesischer Markt) oder direkte Downloads von Entwickler-Websites. Für die meisten Self-Hosting-Projekte ist Hugging Face jedoch die erste Anlaufstelle.</p>
-<h2 id="metriken"><a class="header" href="#metriken">Metriken</a></h2>
-<p>Die Bewertung von LLMs erfolgt anhand verschiedener Metriken und Benchmarks, die unterschiedliche Fähigkeiten testen:</p>
-<p><strong>LLM-Leaderboards</strong>: Plattformen wie das <a href="https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard">Open LLM Leaderboard</a> von Hugging Face aggregieren Benchmark-Ergebnisse und ermöglichen den direkten Vergleich von Modellen. Diese Leaderboards werden kontinuierlich aktualisiert und sind hilfreich für eine erste Orientierung.</p>
-<p><strong>Aufgabenbezogene Benchmarks</strong>: Verschiedene Benchmarks testen spezifische Fähigkeiten:</p>
-<ul>
-<li><strong>MMLU (Massive Multitask Language Understanding)</strong>: Testet Wissen aus 57 Themenbereichen (STEM, Geisteswissenschaften, Sozialwissenschaften)</li>
-<li><strong>GSM8K</strong>: Mathematische Problemlösung (Grundschulmathematik)</li>
-<li><strong>HumanEval</strong>: Programmierfähigkeiten (Code-Generierung)</li>
-<li><strong>HellaSwag</strong>: Commonsense Reasoning</li>
-<li><strong>TruthfulQA</strong>: Faktentreue und Resistenz gegen Fehlinformationen</li>
-</ul>
-<p><strong>Humanities-fokussierte Tests</strong>: Manche Benchmarks verwenden standardisierte Prüfungen aus verschiedenen Bildungssystemen, um die Modellleistung in geisteswissenschaftlichen Bereichen zu messen. Dies kann Examensaufgaben aus Literatur, Geschichte, Philosophie oder Ethik umfassen.</p>
-<p><strong>Wichtige Einschränkungen</strong>: Benchmarks sind nützliche Orientierungshilfen, aber keine vollständige Bewertung. Sie können anfällig für Overfitting sein (Modelle werden auf Benchmark-Performance optimiert), bilden nicht alle relevanten Fähigkeiten ab (z.B. Kreativität, Dialogfähigkeit) und sagen wenig über das Verhalten in spezifischen Anwendungsfällen aus. Für Self-Hosting-Projekte empfiehlt sich, Modelle auch anhand eigener, anwendungsspezifischer Tests zu evaluieren.</p>
+                        <h1 id="alternativen-und-vergleich"><a class="header" href="#alternativen-und-vergleich">Alternativen und Vergleich</a></h1>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="00-introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="03-software.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="02-infra.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="ueber.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -232,11 +194,11 @@ Vor dem Einsatz eines Modells sollte die Lizenz sorgfältig geprüft werden, ins
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="00-introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="03-software.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="02-infra.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="ueber.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
