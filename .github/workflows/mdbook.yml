@@ -68,8 +68,8 @@ jobs:
         if: steps.check_mdbook.outputs.install_needed == 'true'
         run: cargo install --version ${MDBOOK_VERSION} mdbook --force
 
-      # - name: Install mdbook-mermaid
-      #   run: cargo install --force mdbook-mermaid
+      - name: Install mdbook-mermaid
+        run: cargo install --force mdbook-mermaid
 
       # - name: Install mdbook-admonish
       #   run: cargo install --force mdbook-admonish

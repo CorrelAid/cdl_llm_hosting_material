@@ -1,8 +1,8 @@
 # Einleitung, Überblick und Definitionen
 
-Dieses Material entstand auf der Grundlage eines Vortrags[^1] über Self-Hosting von LLMs, der auf dem [Datenfestival](https://www.youtube.com/watch?v=exOeJCLcuHQ) des [Civic Data Lab](https://civic-data.de/) gehalten wurde. Es soll den Vortrag zugänglicher machen, umfassend über das Thema informieren und einen praxisorientierten Überblick geben. 
+Dieses Material entstand auf der Grundlage eines Vortrags[^1] über Self-Hosting von LLMs, der auf dem [Datenfestival](https://www.youtube.com/watch?v=exOeJCLcuHQ) des [Civic Data Lab](https://civic-data.de/) gehalten wurde. Es soll den Vortrag zugänglicher machen, umfassend über das Thema informieren und einen praxisorientierten Überblick geben.
 
-Unter Self-Hosting wird der auf unterschiedlichen Leveln eigenständige Betrieb von Infrastruktur verstanden, auf der in diesem Fall LLMs und mit diesen zusammenhängende Software läuft.
+Unter Self-Hosting wird der (auf unterschiedlichen Leveln) eigenständige Betrieb von Infrastruktur verstanden, auf der in diesem Fall LLMs und mit diesen zusammenhängende Software läuft.
 
 ## Was ist ein LLM?
 
@@ -10,17 +10,17 @@ LLMs (Large Language Models) sind große neuronale Sprachmodelle. Sie basieren a
 
 Die Textgenerierung erfolgt durch zahlreiche Matrizenrechnungen, die sich besonders effizient auf spezialisierter Hardware wie GPUs ausführen lassen. **Open-Weight-Modelle** sind als Dateien verfügbar, die sowohl die Architektur als auch die trainierten Parameter eines Modells enthalten – sie können daher selbst gehostet werden.
 
-Im Kapitel [Open LLMs](./01-models.md) wird detailliert beschrieben, wo man Modelle findet und wie man diese vergleichen kann.
+## Warum Self-Hosting?
+
+Die Nutzung proprietärer LLM-Dienste ist mit  **Abhängigkeiten**, **Intransparenz** und mangelnder **Kontrolle** verbunden. Bei kommerziellen Anbietern bleibt unklar, wie Daten tatsächlich verarbeitet werden, wie die Modelle trainiert wurden und welche Eigenschaften sie besitzen. Auch die Funktionsweise eingebundener Tools wie Websuche sowie der tatsächliche Ressourcenverbrauch sind nicht nachvollziehbar. Self-Hosting adressiert diese Problematik und trägt zur **digitalen Souveränität** bei: Organisationen und Privatpersonen erlangen vollständige Transparenz und Kontrolle über alle Aspekte des LLM-Betriebs – von der Datenverarbeitung über die Modellauswahl bis hin zum Energie- und Ressourcenverbrauch.
 
 ## Worauf wird selbst gehostet?
 
 Self-Hosting kann an verschiedenen Orten erfolgen:
 
-- **Lokal (On-Premises)**: Betrieb auf dem eigenen Laptop oder auf dedizierten Servern, die in den Räumlichkeiten einer Organisation oder Privatperson stehen. Volle Kontrolle, aber auch volle Verantwortung für Hardware und Wartung.
+- **Lokal (On-Premises)**: Betrieb auf dem eigenen Laptop oder auf dedizierten Servern, die in den Räumlichkeiten einer Organisation oder Privatperson stehen. Dies bedeutet volle Kontrolle über das Setup, aber auch volle Verantwortung für Hardware und Wartung.
 - **Cloud**: Server werden in verschiedenen Formen von Cloud-Providern zur Miete angeboten – entweder als virtualisierte Maschine (VM) oder als dedizierte physische Maschine (Bare Metal). Flexibel skalierbar, aber mit laufenden Kosten.
 - **Hybrid (Co-Hosting)**: Kauf eigener Server, die jedoch in den Räumen eines Cloud-Providers betrieben und gewartet werden. Kombination aus Eigentum und professioneller Infrastruktur.
-
-Im Kapitel [Hosting-Infrastruktur](./02-infra.md) werden diese Möglichkeiten und ihre spezifischen Anforderungen für LLMs detailliert verglichen.
 
 ## Was wird selbst gehostet?
 
@@ -75,8 +75,16 @@ flowchart TB
     Tools -->|Erweiterte Funktionen| LLMServer
 ```
 
+## Aufbau der Dokumentation
 
+Die folgenden Kapitel vertiefen die hier eingeführten Konzepte systematisch:
 
+**[Open LLMs](./01-models.md)** erklärt den Unterschied zwischen Open-Weight- und Open-Source-Modellen, gibt einen Überblick über Lizenzmodelle und deren Implikationen, erläutert Quantisierung als zentrale Optimierungstechnik, stellt Hugging Face als primäre Bezugsquelle vor und beschreibt gängige Metriken und Benchmarks zur Modellbewertung.
 
+**[Hosting-Infrastruktur](./02-infra.md)** vergleicht detailliert die verschiedenen Infrastrukturoptionen – von lokalen Servern über Cloud-Lösungen bis zu hybriden Ansätzen. Das Kapitel behandelt Hardware-Anforderungen (CPU vs. GPU, VRAM-Größen, GPU-Generationen) sowie Aspekte wie Energieeffizienz, Kühlungssysteme und langfristige Kostenbetrachtungen.
+
+**[Hosting-Software](./03-software.md)** stellt konkrete Software-Komponenten für die verschiedenen Teile eines LLM-Systems vor – von Inference-Servern über Chat-Interfaces bis zu API-Gateways und Vektor-Datenbanken. Als praktisches Beispiel wird Parrotpark vorgestellt, ein vollständiges self-gehostetes LLM-System, das die Integration verschiedener Open-Source-Komponenten demonstriert.
+
+**[Alternativen](./03-alternatives.md)** diskutiert abschließend Alternativen zum vollständigen Self-Hosting, einschließlich hybrider Ansätze und kommerzieller Lösungen mit verschiedenen Compliance-Leveln.
 
 [^1]: Die Slides des Vortrags lassen sich [hier](https://correlaid.github.io/datenfestival_ap3_session/) finden, begleitender Code [hier](https://github.com/CorrelAid/datenfestival_ap3_session).
