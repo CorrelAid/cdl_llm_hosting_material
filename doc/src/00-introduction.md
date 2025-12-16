@@ -39,9 +39,6 @@ Im Falle des Self-Hostings von LLM-Systemen stellt sich die Frage, welche Kompon
 **Fig. 1** bietet einen graphischen Überblick über die Komponenten und deren Zusammenspiel:
 
 ```mermaid
----
-title: "Fig. 1: Komponenten von LLM-Systemen"
----
 flowchart TB
     subgraph Frontend
         UI[Chat Interface]
@@ -50,8 +47,8 @@ flowchart TB
     subgraph Backend
         direction TB
         subgraph InferenceLayer[Inference Layer]
-            LLMServer[Inference-Server<br/>für LLM]
-            EmbedServer[Inference-Server<br/>für Embedding-Modell]
+            LLMServer[Inference-Server für LLM]
+            EmbedServer[Inference-Server für Embedding-Modell]
         end
 
         subgraph DataStorage[Datenschicht]

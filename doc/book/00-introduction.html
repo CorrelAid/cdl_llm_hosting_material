@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-58025a59.js";
+            window.path_to_searchindex_js = "searchindex-371823cd.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-29b41a76.js"></script>
@@ -201,10 +201,7 @@
 </ul>
 <p><strong>RAG im Detail</strong>: Bei RAG wird semantische Suche verwendet. Dabei verarbeitet ein Embedding-Modell Texte zu sogenannten Embeddings. Embeddings sind Vektore, die den Textinhalt in numerischer Form repräsentieren. Diese Embeddings ermöglichen es, inhaltlich ähnliche Dokumente zu finden und dem LLM als Kontext bereitzustellen.</p>
 <p><strong>Fig. 1</strong> bietet einen graphischen Überblick über die Komponenten und deren Zusammenspiel:</p>
-<pre class="mermaid">---
-title: "Fig. 1: Komponenten von LLM-Systemen"
----
-flowchart TB
+<pre class="mermaid">flowchart TB
     subgraph Frontend
         UI[Chat Interface]
     end
@@ -212,8 +209,8 @@ flowchart TB
     subgraph Backend
         direction TB
         subgraph InferenceLayer[Inference Layer]
-            LLMServer[Inference-Server&lt;br/&gt;für LLM]
-            EmbedServer[Inference-Server&lt;br/&gt;für Embedding-Modell]
+            LLMServer[Inference-Server für LLM]
+            EmbedServer[Inference-Server für Embedding-Modell]
         end
 
         subgraph DataStorage[Datenschicht]

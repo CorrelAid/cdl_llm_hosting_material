@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-58025a59.js";
+            window.path_to_searchindex_js = "searchindex-371823cd.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-29b41a76.js"></script>
@@ -195,32 +195,27 @@
 <li><strong>Proxy</strong>: Caddy – regelt SSL-Verschlüsselung für HTTPS und leitet Anfragen weiter</li>
 <li>S3-Buckets für Dateispeicherung, Scheduler für automatische Server-Verwaltung</li>
 </ul>
-<pre class="mermaid">---
-title: "Fig. 2: Überblick Parrotpark"
----
-flowchart LR
-
-    subgraph proxy["Eingangsserver"]
+<pre class="mermaid">flowchart LR
+    subgraph proxy[Eingangsserver]
     direction TB
       Caddy
-      Databases["Vektor-DB&lt;br/&gt;Anwendungs-DB"]
+      Databases[Vektor-DB und Anwendungs-DB]
       Scheduler
     end
-    subgraph gpu["Ephemeral GPU Server"]
+    subgraph gpu[Ephemeral GPU Server]
     direction TB
-      vLLM["vLLM&lt;br/&gt;Inference-Server für gen. &amp; Embedding-Modell"]
-      LiteLLM["LiteLLM&lt;br/&gt;API Gateway"]
-      LibreChat["LibreChat&lt;br/&gt;Chat Interface"]
+      vLLM[vLLM Inference-Server]
+      LiteLLM[LiteLLM API Gateway]
+      LibreChat[LibreChat Chat Interface]
     end
-      LibreChat ---|SSO Auth| Keycloak
-
-      buckets["S3 Buckets&lt;br/&gt;Tools"]
-      LibreChat ---|Speicherung| buckets
-
-    LiteLLM &amp; LibreChat --- Databases
-    Caddy --&gt;|Proxy| LiteLLM &amp; LibreChat
+    LibreChat --&gt;|SSO Auth| Keycloak
+    buckets[S3 Buckets Tools]
+    LibreChat --&gt;|Speicherung| buckets
+    LiteLLM --- Databases
+    LibreChat --- Databases
+    Caddy --&gt;|Proxy| LiteLLM
+    Caddy --&gt;|Proxy| LibreChat
     Scheduler --&gt;|Erstellt periodisch| gpu
-
 </pre>
 
 <hr>

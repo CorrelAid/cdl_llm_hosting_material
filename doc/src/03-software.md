@@ -22,32 +22,27 @@ Während nicht jedes Self-Hosting Setup so komplex sein muss, zeigt dieses Beisp
 
 
 ```mermaid
----
-title: "Fig. 2: Überblick Parrotpark"
----
 flowchart LR
-
-    subgraph proxy["Eingangsserver"]
+    subgraph proxy[Eingangsserver]
     direction TB
       Caddy
-      Databases["Vektor-DB<br/>Anwendungs-DB"]
+      Databases[Vektor-DB und Anwendungs-DB]
       Scheduler
     end
-    subgraph gpu["Ephemeral GPU Server"]
+    subgraph gpu[Ephemeral GPU Server]
     direction TB
-      vLLM["vLLM<br/>Inference-Server für gen. & Embedding-Modell"]
-      LiteLLM["LiteLLM<br/>API Gateway"]
-      LibreChat["LibreChat<br/>Chat Interface"]
+      vLLM[vLLM Inference-Server]
+      LiteLLM[LiteLLM API Gateway]
+      LibreChat[LibreChat Chat Interface]
     end
-      LibreChat ---|SSO Auth| Keycloak
-
-      buckets["S3 Buckets<br/>Tools"]
-      LibreChat ---|Speicherung| buckets
-
-    LiteLLM & LibreChat --- Databases
-    Caddy -->|Proxy| LiteLLM & LibreChat
+    LibreChat -->|SSO Auth| Keycloak
+    buckets[S3 Buckets Tools]
+    LibreChat -->|Speicherung| buckets
+    LiteLLM --- Databases
+    LibreChat --- Databases
+    Caddy -->|Proxy| LiteLLM
+    Caddy -->|Proxy| LibreChat
     Scheduler -->|Erstellt periodisch| gpu
-
 ```
 
 [^1]: Mehr Informationen zu Parrotpark [hier](https://github.com/CorrelAid/parrotpark).

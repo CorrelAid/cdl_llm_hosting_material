@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-58025a59.js";
+            window.path_to_searchindex_js = "searchindex-371823cd.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-29b41a76.js"></script>
@@ -202,10 +202,7 @@
 </ul>
 <p><strong>RAG im Detail</strong>: Bei RAG wird semantische Suche verwendet. Dabei verarbeitet ein Embedding-Modell Texte zu sogenannten Embeddings. Embeddings sind Vektore, die den Textinhalt in numerischer Form repräsentieren. Diese Embeddings ermöglichen es, inhaltlich ähnliche Dokumente zu finden und dem LLM als Kontext bereitzustellen.</p>
 <p><strong>Fig. 1</strong> bietet einen graphischen Überblick über die Komponenten und deren Zusammenspiel:</p>
-<pre class="mermaid">---
-title: "Fig. 1: Komponenten von LLM-Systemen"
----
-flowchart TB
+<pre class="mermaid">flowchart TB
     subgraph Frontend
         UI[Chat Interface]
     end
@@ -213,8 +210,8 @@ flowchart TB
     subgraph Backend
         direction TB
         subgraph InferenceLayer[Inference Layer]
-            LLMServer[Inference-Server&lt;br/&gt;für LLM]
-            EmbedServer[Inference-Server&lt;br/&gt;für Embedding-Modell]
+            LLMServer[Inference-Server für LLM]
+            EmbedServer[Inference-Server für Embedding-Modell]
         end
 
         subgraph DataStorage[Datenschicht]
@@ -351,32 +348,27 @@ Vor dem Einsatz eines Modells sollte die Lizenz sorgfältig geprüft werden, ins
 <li><strong>Proxy</strong>: Caddy – regelt SSL-Verschlüsselung für HTTPS und leitet Anfragen weiter</li>
 <li>S3-Buckets für Dateispeicherung, Scheduler für automatische Server-Verwaltung</li>
 </ul>
-<pre class="mermaid">---
-title: "Fig. 2: Überblick Parrotpark"
----
-flowchart LR
-
-    subgraph proxy["Eingangsserver"]
+<pre class="mermaid">flowchart LR
+    subgraph proxy[Eingangsserver]
     direction TB
       Caddy
-      Databases["Vektor-DB&lt;br/&gt;Anwendungs-DB"]
+      Databases[Vektor-DB und Anwendungs-DB]
       Scheduler
     end
-    subgraph gpu["Ephemeral GPU Server"]
+    subgraph gpu[Ephemeral GPU Server]
     direction TB
-      vLLM["vLLM&lt;br/&gt;Inference-Server für gen. &amp; Embedding-Modell"]
-      LiteLLM["LiteLLM&lt;br/&gt;API Gateway"]
-      LibreChat["LibreChat&lt;br/&gt;Chat Interface"]
+      vLLM[vLLM Inference-Server]
+      LiteLLM[LiteLLM API Gateway]
+      LibreChat[LibreChat Chat Interface]
     end
-      LibreChat ---|SSO Auth| Keycloak
-
-      buckets["S3 Buckets&lt;br/&gt;Tools"]
-      LibreChat ---|Speicherung| buckets
-
-    LiteLLM &amp; LibreChat --- Databases
-    Caddy --&gt;|Proxy| LiteLLM &amp; LibreChat
+    LibreChat --&gt;|SSO Auth| Keycloak
+    buckets[S3 Buckets Tools]
+    LibreChat --&gt;|Speicherung| buckets
+    LiteLLM --- Databases
+    LibreChat --- Databases
+    Caddy --&gt;|Proxy| LiteLLM
+    Caddy --&gt;|Proxy| LibreChat
     Scheduler --&gt;|Erstellt periodisch| gpu
-
 </pre>
 
 <hr>
