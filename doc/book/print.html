@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-371823cd.js";
+            window.path_to_searchindex_js = "searchindex-3d607139.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-29b41a76.js"></script>
@@ -349,20 +349,24 @@ Vor dem Einsatz eines Modells sollte die Lizenz sorgfältig geprüft werden, ins
 <li>S3-Buckets für Dateispeicherung, Scheduler für automatische Server-Verwaltung</li>
 </ul>
 <pre class="mermaid">flowchart LR
-    subgraph proxy[Eingangsserver]
-    direction TB
-      Caddy
-      Databases[Vektor-DB und Anwendungs-DB]
-      Scheduler
-    end
-    subgraph gpu[Ephemeral GPU Server]
-    direction TB
-      vLLM[vLLM Inference-Server]
-      LiteLLM[LiteLLM API Gateway]
-      LibreChat[LibreChat Chat Interface]
-    end
-    LibreChat --&gt;|SSO Auth| Keycloak
+    Keycloak[Keycloak]
     buckets[S3 Buckets Tools]
+
+    subgraph proxy[Eingangsserver]
+        direction TB
+        Caddy
+        Databases[Vektor-DB und Anwendungs-DB]
+        Scheduler
+    end
+
+    subgraph gpu[Ephemeral GPU Server]
+        direction TB
+        vLLM[vLLM Inference-Server]
+        LiteLLM[LiteLLM API Gateway]
+        LibreChat[LibreChat Chat Interface]
+    end
+
+    LibreChat --&gt;|SSO Auth| Keycloak
     LibreChat --&gt;|Speicherung| buckets
     LiteLLM --- Databases
     LibreChat --- Databases

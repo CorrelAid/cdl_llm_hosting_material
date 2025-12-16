@@ -23,20 +23,24 @@ Während nicht jedes Self-Hosting Setup so komplex sein muss, zeigt dieses Beisp
 
 ```mermaid
 flowchart LR
-    subgraph proxy[Eingangsserver]
-    direction TB
-      Caddy
-      Databases[Vektor-DB und Anwendungs-DB]
-      Scheduler
-    end
-    subgraph gpu[Ephemeral GPU Server]
-    direction TB
-      vLLM[vLLM Inference-Server]
-      LiteLLM[LiteLLM API Gateway]
-      LibreChat[LibreChat Chat Interface]
-    end
-    LibreChat -->|SSO Auth| Keycloak
+    Keycloak[Keycloak]
     buckets[S3 Buckets Tools]
+
+    subgraph proxy[Eingangsserver]
+        direction TB
+        Caddy
+        Databases[Vektor-DB und Anwendungs-DB]
+        Scheduler
+    end
+
+    subgraph gpu[Ephemeral GPU Server]
+        direction TB
+        vLLM[vLLM Inference-Server]
+        LiteLLM[LiteLLM API Gateway]
+        LibreChat[LibreChat Chat Interface]
+    end
+
+    LibreChat -->|SSO Auth| Keycloak
     LibreChat -->|Speicherung| buckets
     LiteLLM --- Databases
     LibreChat --- Databases
