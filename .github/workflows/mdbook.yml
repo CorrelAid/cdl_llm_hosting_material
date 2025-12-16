@@ -69,7 +69,7 @@ jobs:
         run: cargo install --version ${MDBOOK_VERSION} mdbook --force
 
       - name: Install mdbook-mermaid
-        run: cargo install --force mdbook-mermaid
+        run: cargo install --version 0.14.0 mdbook-mermaid
 
       # - name: Install mdbook-admonish
       #   run: cargo install --force mdbook-admonish
