@@ -1,8 +1,6 @@
-# Hosting-Infrastruktur
-
-LLMs lassen sich prinzipiell auf fast allen Arten von Infrastruktur betreiben – theoretisch sogar auf einem Raspberry Pi. Die praktisch erreichbare Geschwindigkeit, Modellqualität und Länge des In- und Outputs unterscheiden sich jedoch erheblich je nach Hardware. Dieses Kapitel beschreibt die Hardware-Anforderungen für LLM-Hosting, den damit verbundenen Ressourcenverbrauch und die verschiedenen Infrastruktur-Optionen von lokal bis Cloud.
-
 ## Worauf wird selbst gehostet?
+
+LLMs lassen sich prinzipiell auf fast allen Arten von Infrastruktur betreiben – sogar auf einem [Raspberry Pi](https://www.maketecheasier.com/run-llm-on-raspberry-pi/). Die praktisch erreichbare Geschwindigkeit, Modellqualität und Länge des In- und Outputs unterscheiden sich jedoch erheblich je nach Hardware. Dieses Kapitel beschreibt die Hardware-Anforderungen für LLM-Hosting, den damit verbundenen Ressourcenverbrauch und die verschiedenen Infrastruktur-Optionen von lokal bis Cloud.
 
 Self-Hosting kann an verschiedenen Orten erfolgen:
 

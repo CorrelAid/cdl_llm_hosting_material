@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ad046a64.js";
+            window.path_to_searchindex_js = "searchindex-a2075c5c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-64f8deb7.js"></script>
@@ -187,13 +187,13 @@
 <p>Im <a href="#open-llms">1. Kapitel</a> wird sich zunächst mit LLMs an sich beschäftigt. Was ist das überhaupt? Das Kapitel enthält Erläuterungen zu LLMs an sich. Was verstehen wir darunter? Es erklärt außerdem den Unterschied zwischen Open-Weight- und Open-Source-Modellen, gibt einen Überblick über Lizenzmodelle und deren Implikationen, erläutert Quantisierung als zentrale Optimierungstechnik, stellt Hugging Face als primäre Bezugsquelle vor und beschreibt gängige Metriken und Benchmarks zur Modellbewertung.</p>
 </li>
 <li>
-<p>Im <a href="#hosting-software">2. Kapitel</a> werden die Fragen beantwortet: Was wird selbst gehostet, wie werden LLMs betrieben und welche Komponenten werden außer dem LLM benötigt? Hier werden  konkrete Software-Komponenten für die verschiedenen Teile eines LLM-Systems vorgestellt. Von Inference-Servern über Chat-Interfaces bis zu API-Gateways und Vektor-Datenbanken. Als praktisches Beispiel wird Parrotpark vorgestellt, ein vollständiges self-gehostetes LLM-System, das die Integration verschiedener Open-Source-Komponenten demonstriert.</p>
+<p>Im <a href="#was-wird-wofür-selbst-gehostet">2. Kapitel</a> werden die Fragen beantwortet: Was wird selbst gehostet, wie werden LLMs betrieben und welche Komponenten werden außer dem LLM benötigt? Hier werden  konkrete Software-Komponenten für die verschiedenen Teile eines LLM-Systems vorgestellt. Von Inference-Servern über Chat-Interfaces bis zu API-Gateways und Vektor-Datenbanken. Als praktisches Beispiel wird Parrotpark vorgestellt, ein vollständiges self-gehostetes LLM-System, das die Integration verschiedener Open-Source-Komponenten demonstriert.</p>
 </li>
 <li>
-<p>Das <a href="(./02-infra.html">3. Kapitel</a> beantwortet die Frage: Worauf wird selbst gehostet? Das Kapitel enthält einen Vergleich zwischen den verschiedenen Infrastrukturoptionen. Außerdem behandelt das Kapitel  Hardware-Anforderungen (CPU vs. GPU, VRAM-Größen, GPU-Generationen) sowie Aspekte wie Ressourcenverbrauch und langfristige Kostenbetrachtungen.</p>
+<p>Das <a href="02-infra.html">3. Kapitel</a> beantwortet die Frage: Worauf wird selbst gehostet? Das Kapitel enthält einen Vergleich zwischen den verschiedenen Infrastrukturoptionen. Außerdem behandelt das Kapitel  Hardware-Anforderungen (CPU vs. GPU, VRAM-Größen, GPU-Generationen) sowie Aspekte wie Ressourcenverbrauch und langfristige Kostenbetrachtungen.</p>
 </li>
 <li>
-<p>In <a href="(./03-alternatives.html">Kapitel 4</a> werden Alternativen zum vollständigen Self-Hosting, einschließlich hybrider Ansätze und kommerzieller Lösungen mit verschiedenen Compliance-Leveln vorgestellt.</p>
+<p>In <a href="03-alternatives.html">Kapitel 4</a> werden Alternativen zum vollständigen Self-Hosting, einschließlich hybrider Ansätze und kommerzieller Lösungen mit verschiedenen Compliance-Leveln vorgestellt.</p>
 </li>
 </ul>
 <hr>
@@ -205,84 +205,100 @@
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="open-llms"><a class="header" href="#open-llms">Open LLMs</a></h1>
 <h2 id="was-ist-ein-llm"><a class="header" href="#was-ist-ein-llm">Was ist ein LLM?</a></h2>
-<p>LLMs (Large Language Models) sind große neuronalen Netzwerke. Das ist eine Struktur aus vielen miteinander verbundene Schichten aus Modellen biologischer Neuronen (basierend auf dem, was 1943 über Neuronen bekannt war) [<a href="#mcculloch_logical_1943">mcculloch_logical_1943</a>]. Die Neuronen führen einzelne Rechnungen aus, bei denen konfigurierbare Parameter verwendet werden. Beim Training dieser Modelle werden Millionen oder sogar Milliarden dieser Parametern nach und nach angepasst, bis der Output des Modells den Trainingsdaten entspricht.</p>
-<p>Die bekanntesten LLMs sind <strong>generativ</strong>, haben also als Input und als Output Text. Andere LLMs haben als Output Zahlen in Form von Vektoren, der den Text-Input semantisch repräsentieren soll, sogenannte <strong>Embeddings</strong>.</p>
+<p>LLMs (Large Language Models) sind große neuronalen Netzwerke. Das ist eine Struktur aus vielen miteinander verbundene Schichten aus Modellen biologischer Neuronen (basierend auf dem, was 1943 über Neuronen bekannt war) [<a href="#mcculloch_logical_1943">mcculloch_logical_1943</a>]. Diese Neuronenmodelle führen einzelne Rechnungen aus, bei denen konfigurierbare Parameter verwendet werden. Beim Training von LLMs werden Millionen oder sogar Milliarden dieser Parameter nach und nach angepasst, bis der Output des Modells den Trainingsdaten entspricht.</p>
+<p>Die bekanntesten LLMs sind <strong>generativ</strong>, haben also als Input und als Output (mindestens) Text. Andere LLMs haben als Output Zahlen in Form von Vektoren, der den Text-Input semantisch repräsentieren soll, sogenannte <strong>Embeddings</strong>. <strong>Multimodale LLMs</strong> können z.B. auch Bilder verarbeiten und deren Inhalt sprachlich repräsentieren.</p>
 <p>Generell wird der Output hergestellt durch zahlreiche Matrizenrechnungen, die sich besonders effizient auf spezialisierter Hardware wie GPUs (Graphics Processing Unit/Grafikkarten) ausführen lassen, da sie dort in großer Zahl gleichzeitig passieren können.</p>
-<p><strong>Open-Weight-Modelle</strong> sind als Dateien verfügbar, die sowohl die Architektur als auch die trainierten Parameter eines Modells enthalten und selbst gehostet werden können. Für das Self-Hosting von LLMs stehen zahlreiche solcher Modelle zur Verfügung. Dieses Kapitel gibt einen Überblick über die wichtigsten Aspekte bei der Auswahl und Bewertung von Modellen: von Lizenzfragen über technische Optimierungen bis hin zu Bezugsquellen und Bewertungsmetriken.</p>
+<p>Modelle können als Dateien verfügbar gemacht werden, die sowohl die Architektur als auch die trainierten Parameter eines Modells enthalten und somit selbst betrieven werden können. Für das Self-Hosting von LLMs stehen zahlreiche solcher Modelle zur Verfügung. Dieses Kapitel gibt einen Überblick über die wichtigsten Aspekte bei der Modellauswahl und -bewertung.</p>
 <h2 id="open-weight-vs-open-source"><a class="header" href="#open-weight-vs-open-source">Open Weight vs. Open Source</a></h2>
 <p>Im Kontext von Large Language Models wird häufig von Open-Source-Modellen gesprochen, obwohl die meisten dieser Modelle technisch gesehen Open-Weight-Modelle (hier auch Open Modelle genannt) sind. Der Unterschied mag unwichtig klingen, hat jedoch Bedeutung für die Einordnung dessen, was die Urheber der LLMs wirklich bereitstellen:</p>
 <ul>
 <li>
-<p><strong>Open-Weight-Modelle</strong> stellen die trainierten Modellparameter (Weights) öffentlich zur Verfügung. Nutzer:innen können diese Modelle herunterladen, ausführen und für eigene Zwecke verwenden. Allerdings sind oft weder die Trainingsdaten noch der vollständige Trainingscode verfügbar. Beispiele: Llama (Meta), Mistral (Mistral AI), Qwen (Alibaba).</p>
+<p><strong>Open-Weight-Modelle</strong> stellen die trainierten Modellparameter (Weights) öffentlich zur Verfügung. Nutzer:innen können diese Modelle herunterladen, ausführen und für eigene Zwecke verwenden. Allerdings sind oft weder die Trainingsdaten noch der vollständige Trainingscode verfügbar.</p>
 </li>
 <li>
-<p><strong>Open-Source-Modelle</strong> im engeren Sinne gehen weiter: Sie veröffentlichen nicht nur die Modellparameter, sondern auch die Trainingsdaten, den Trainingscode und die gesamte Entwicklungspipeline. Dies ermöglicht vollständige Reproduzierbarkeit und Transparenz. Beispiele: OLMo (Allen Institute for AI), Pythia (EleutherAI).</p>
+<p><strong>Open-Source-Modelle</strong> im engeren Sinne gehen weiter: Sie veröffentlichen nicht nur die Modellparameter, sondern auch die Trainingsdaten, den Trainingscode und die gesamte Entwicklungspipeline. Dies ermöglicht vollständige Reproduzierbarkeit und Transparenz.</p>
 </li>
 </ul>
 <p>Für Self-Hosting sind beide Varianten geeignet, wobei Open-Weight-Modelle deutlich verbreiteter sind. Die Wahl zwischen beiden hängt davon ab, wie wichtig vollständige Transparenz und Reproduzierbarkeit für den jeweiligen Anwendungsfall sind.</p>
-<h2 id="lizenzen"><a class="header" href="#lizenzen">Lizenzen</a></h2>
-<p>Die Lizenzen von LLMs unterscheiden sich erheblich und haben direkten Einfluss darauf, wie die Modelle genutzt werden dürfen:</p>
-<p><strong>Permissive Lizenzen</strong> (z.B. Apache 2.0, MIT): Erlauben kommerzielle Nutzung, Modifikation und Weiterverbreitung mit minimalen Einschränkungen. Beispiele: Mistral-Modelle, Qwen-Modelle.</p>
-<p><strong>Restriktive Community-Lizenzen</strong>: Erlauben Nutzung und Modifikation, schränken aber kommerzielle Nutzung ein oder verlangen Lizenzgebühren ab einer bestimmten Nutzerzahl. Beispiel: Llama-Modelle haben eine Custom-Lizenz[^1], die bei über 700 Millionen monatlichen Nutzern eine separate Vereinbarung erfordert.</p>
-<p><strong>Research-Only-Lizenzen</strong>: Beschränken die Nutzung auf nicht-kommerzielle Forschungszwecke. Solche Modelle eignen sich nicht für produktive Self-Hosting-Szenarien.</p>
-<p>Vor dem Einsatz eines Modells sollte die Lizenz sorgfältig geprüft werden, insbesondere bei kommerzieller Nutzung oder bei Organisationen mit vielen Nutzer:innen. Die Lizenzen sind in der Regel auf den Modell-Seiten bei Hugging Face oder auf den Websites der Entwickler dokumentiert.</p>
-<h2 id="quantisierung"><a class="header" href="#quantisierung">Quantisierung</a></h2>
-<p>Quantisierung ist eine Technik zur Reduzierung der Modellgröße und des Speicherbedarfs, die für Self-Hosting von zentraler Bedeutung ist.</p>
-<p><strong>Funktionsweise</strong>: Bei der Quantisierung werden die Modellparameter von höherer Präzision (z.B. 16-Bit oder 32-Bit Floating Point) in niedrigere Präzision (z.B. 8-Bit, 4-Bit oder sogar 2-Bit) konvertiert. Dies reduziert den benötigten GPU-Speicher (VRAM) erheblich.</p>
-<p><strong>Auswirkungen</strong>: Ein Modell mit 70 Milliarden Parametern (70B) benötigt in voller Präzision (FP16) etwa 140 GB VRAM. Mit 4-Bit-Quantisierung reduziert sich der Bedarf auf ca. 35 GB – ein Unterschied, der darüber entscheidet, ob ein Modell auf verfügbarer Hardware überhaupt lauffähig ist.</p>
-<p><strong>Trade-offs</strong>: Quantisierung führt zu leichten Qualitätseinbußen bei den Modellantworten. Moderne Quantisierungsmethoden wie GPTQ, AWQ oder GGUF minimieren diese Verluste jedoch stark. In vielen Anwendungsfällen ist der Qualitätsunterschied zwischen 4-Bit und voller Präzision kaum wahrnehmbar, während die Geschwindigkeit deutlich zunimmt.</p>
-<p><strong>Praktische Bedeutung</strong>: Für Self-Hosting sind quantisierte Modelle oft die einzige praktikable Option. Die meisten Inference-Server unterstützen verschiedene Quantisierungsformate, und auf Hugging Face sind bereits quantisierte Versionen beliebter Modelle verfügbar.</p>
-<h2 id="hugging-face"><a class="header" href="#hugging-face">Hugging Face</a></h2>
-<p><a href="https://huggingface.co/">Hugging Face</a> ist die zentrale Plattform für Open-Weight- und Open-Source-LLMs. Sie fungiert als Repository, Community-Hub und Entwicklungsplattform.</p>
-<p><strong>Model Hub</strong>: Tausende von Modellen sind verfügbar, von kleinen spezialisierten Modellen bis zu großen Frontier-Modellen. Jedes Modell verfügt über eine Seite mit Beschreibung, Lizenzinformationen, Nutzungsbeispielen und Download-Links. Filter ermöglichen die Suche nach Modellgröße, Aufgabe, Lizenz und weiteren Kriterien.</p>
-<p><strong>Praktische Nutzung</strong>: Modelle können direkt über die Webseite heruntergeladen oder programmgesteuert über die Hugging Face API bezogen werden. Die meisten Inference-Server können Modelle automatisch von Hugging Face laden, indem lediglich der Modellname angegeben wird (z.B. <code>mistralai/Mistral-7B-Instruct-v0.2</code>).</p>
-<p><strong>Zusätzliche Ressourcen</strong>: Neben Modellen hostet Hugging Face auch Datasets und Spaces (interaktive Demos). Die Plattform bietet umfangreiche Dokumentation und eine aktive Community, die bei Fragen hilft.</p>
-<p><strong>Alternativen</strong>: Während Hugging Face die dominante Plattform ist, gibt es Alternativen wie ModelScope (chinesischer Markt) oder direkte Downloads von Entwickler-Websites. Für die meisten Self-Hosting-Projekte ist Hugging Face jedoch die erste Anlaufstelle.</p>
-<h2 id="metriken"><a class="header" href="#metriken">Metriken</a></h2>
-<p>Die Bewertung von LLMs erfolgt anhand verschiedener Metriken und Benchmarks, die unterschiedliche Fähigkeiten testen:</p>
-<p><strong>LLM-Leaderboards</strong>: Plattformen wie das <a href="https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard">Open LLM Leaderboard</a> von Hugging Face aggregieren Benchmark-Ergebnisse und ermöglichen den direkten Vergleich von Modellen. Diese Leaderboards werden kontinuierlich aktualisiert und sind hilfreich für eine erste Orientierung.</p>
-<p><strong>Aufgabenbezogene Benchmarks</strong>: Verschiedene Benchmarks testen spezifische Fähigkeiten:</p>
+<h2 id="bekannte-open-source-modelle"><a class="header" href="#bekannte-open-source-modelle">Bekannte Open (Source) Modelle</a></h2>
+<p>Die Zahl der Open Modelle nahm in den letzten Jahren rasant zu. Die meisten der größten Tech-Unternehmen haben mittlerweile Open-Modelle entwickelt, darunter Google (<a href="https://deepmind.google/models/gemma/">Gemma</a>), Microsoft (<a href="https://azure.microsoft.com/en-us/products/phi">Phi</a>), Meta (<a href="https://www.llama.com/">Llama</a>), oder IBM (<a href="https://www.ibm.com/granite">Granite</a>). Andere bekannte Anbieter und Modelle sind:</p>
 <ul>
-<li><strong>MMLU (Massive Multitask Language Understanding)</strong>: Testet Wissen aus 57 Themenbereichen (STEM, Geisteswissenschaften, Sozialwissenschaften)</li>
-<li><strong>GSM8K</strong>: Mathematische Problemlösung (Grundschulmathematik)</li>
-<li><strong>HumanEval</strong>: Programmierfähigkeiten (Code-Generierung)</li>
-<li><strong>HellaSwag</strong>: Commonsense Reasoning</li>
-<li><strong>TruthfulQA</strong>: Faktentreue und Resistenz gegen Fehlinformationen</li>
+<li>
+<p><strong>Mistral AI</strong>: <a href="https://mistral.ai/news/mistral-small-3-1">Mistral Small 3.1</a></p>
+</li>
+<li>
+<p><strong>OpenAI</strong>: <a href="https://openai.com/index/introducing-gpt-oss/">gpt-oss</a></p>
+</li>
+<li>
+<p><strong>Allen Institute for Artificial Intelligence</strong>: <a href="https://allenai.org/olmo">Olmo</a></p>
+</li>
 </ul>
-<p><strong>Humanities-fokussierte Tests</strong>: Manche Benchmarks verwenden standardisierte Prüfungen aus verschiedenen Bildungssystemen, um die Modellleistung in geisteswissenschaftlichen Bereichen zu messen. Dies kann Examensaufgaben aus Literatur, Geschichte, Philosophie oder Ethik umfassen.</p>
-<p><strong>Wichtige Einschränkungen</strong>: Benchmarks sind nützliche Orientierungshilfen, aber keine vollständige Bewertung. Sie können anfällig für Overfitting sein (Modelle werden auf Benchmark-Performance optimiert), bilden nicht alle relevanten Fähigkeiten ab (z.B. Kreativität, Dialogfähigkeit) und sagen wenig über das Verhalten in spezifischen Anwendungsfällen aus. Für Self-Hosting-Projekte empfiehlt sich, Modelle auch anhand eigener, anwendungsspezifischer Tests zu evaluieren.</p>
+<h2 id="hugging-face-wo-findet-man-open-modelle-und-in-welchen-varianten-gibt-es-sie"><a class="header" href="#hugging-face-wo-findet-man-open-modelle-und-in-welchen-varianten-gibt-es-sie">Hugging Face: Wo findet man Open Modelle und in welchen Varianten gibt es sie?</a></h2>
+<p><a href="https://huggingface.co/">Hugging Face</a> ist die zentrale Plattform für das Teilen von Open-Weight- und Open-Source-LLMs. Sie fungiert als Repository, Community-Hub und Entwicklungsplattform.</p>
+<p>Tausende von Modellen sind verfügbar, von kleinen spezialisierten Modellen bis zu großen Frontier-Modellen. Jedes Modell verfügt über eine Seite mit Beschreibung, Lizenzinformationen, Nutzungsbeispielen und Download-Links. Filter ermöglichen die Suche nach Modellgröße, Aufgabe, Lizenz und weiteren Kriterien.</p>
+<p>Modelle können direkt über die Webseite heruntergeladen oder programmgesteuert über die Hugging Face API bezogen werden. Die meisten <a href="#was-wird-wofür-selbst-gehostet">Inference-Server</a> können Modelle automatisch von Hugging Face laden, indem lediglich der Modellname angegeben wird (z.B. <code>mistralai/Mistral-7B-Instruct-v0.2</code>).</p>
+<h3 id="varianten-von-modellen"><a class="header" href="#varianten-von-modellen">Varianten von Modellen</a></h3>
+<p>Die Varianten und damit zusammenhängende Benennung von Modellen kann etwas verwirrend sein.</p>
+<ul>
+<li>
+<p><code>mistralai/Mistral-Small-24B-Instruct-2501</code>: Organisation (mistralai) / Modellfamilie (Mistral-Small) / Parameterzahl (24 Milliarden) / Fähigkeit (Instruct für Anweisungen) / Release-Datum (Januar 2025)</p>
+</li>
+<li>
+<p><code>Qwen/Qwen3-VL-2B-Thinking-FP8</code>: Organisation (Qwen/Alibaba) / Familie (Qwen) / Generation (3) / Modalität (VL für Vision-Language) / Parameterzahl (2 Milliarden) / Fähigkeit (Thinking für Reasoning) / Quantisierung (FP8 für 8-bit Floating Point)</p>
+</li>
+</ul>
+<p>Oft werden neben Instruct oder Thinking Varianten auch Base-Varianten veröffentlicht, die noch nicht an das Ausführen von Anweisungen angepasst worden sind, sondern nur Sprache vervollständigen können.</p>
+<h3 id="quantisierung"><a class="header" href="#quantisierung">Quantisierung</a></h3>
+<p>Das <strong>FP8</strong> in <code>Qwen3-VL-2B-Thinking-FP8</code> steht für das Datenformat der Parameter des Modells. Dieses Modell wurde während oder nach dem Training quantisiert. Quantisierung ist eine Technik zur Reduzierung der Modellgröße und des Speicherbedarfs, die für Self-Hosting von zentraler Bedeutung ist. Bei der Quantisierung werden die Modellparameter von höherer Präzision (z.B. 16-Bit oder 32-Bit Floating Point) in niedrigere Präzision (z.B. 8-Bit, 4-Bit oder sogar 2-Bit) konvertiert. Dies reduziert den benötigten GPU-Speicher (VRAM) erheblich.</p>
+<p>Quantisierung führt zu leichten Qualitätseinbußen bei den Modellantworten. Moderne Quantisierungsmethoden minimieren diese Verluste jedoch stark. In vielen Anwendungsfällen ist der Qualitätsunterschied kaum wahrnehmbar, während die Geschwindigkeit deutlich zunimmt.</p>
+<p>Für Self-Hosting sind quantisierte Modelle oft die einzige praktikable Option. Die meisten Inference-Server unterstützen verschiedene Quantisierungsformate, und auf Hugging Face sind bereits quantisierte Versionen beliebter Modelle verfügbar.</p>
+<h2 id="auswahl-von-modellen---evaluation-von-llms"><a class="header" href="#auswahl-von-modellen---evaluation-von-llms">Auswahl von Modellen - Evaluation von LLMs</a></h2>
+<p>LLMs zu evaluieren ist aufgrund der Größe ihres Einsatzgebietes und der Art ihrer Fähigkeiten keine einfache Aufgabe. LLMs sind als Teil des Gebiets des Machine Learning eine KI-Technologie. Künstliche Intelligenz heißt so, weil diese Technologie in Relation zur menschlichen Intelligenz gestellt wird: es besteht Ähnlichkeit bei Zielen, Herstellung oder Funktionsweise (bei Komponenten) von Intelligenz [<a href="#unesco_ethik_2023">unesco_ethik_2023</a>]. Misst man bei der Evaluation von LLMs deren Intelligenz? Das ist mindestens umstritten.</p>
+<p>Eine pragmatische Herangehensweise setzt bei der konkreten Aufgabe an, die ein LLM erfüllen soll. Will man es z.B. zur Klassifikation deutscher Texte verwenden, kann man herkömmliche Metriken den <a href="https://de.wikipedia.org/wiki/Beurteilung_eines_bin%C3%A4ren_Klassifikators#Kombinierte_Ma%C3%9Fe">F-Score</a> nutzen. Hat man bereits klassifizierte Texte, kann man Modelle selbst testen.</p>
+<p>Man kann sich jedoch auch an vorhandenen aufgabenbezogene Benchmarks orientieren. Ein Beispiel dafür ist <a href="https://huggingface.co/spaces/fair-forward/languagebench"><code>languagebench</code></a>, das neben Tasks wie Klassifikation auch zwischen der Performance auf unterschiedlichen Sprachen unterscheidet.</p>
+<p>Andere vorhande Benchmarks testen LLMs auf einem breiteren, mehr mit Intelligenz verbundenen Level. <a href="https://agi.safe.ai/">Humanities Last Exam</a> enthält Problemstellungen in akademischen Disziplinen. Auch wenn es sich um einen provokanten Titel handelt, schreiben die Urheber:innen des Tests, dass es sich um keinen generellen Test auf Intelligenz handele, sondern um eine “gezielte Messung von technischem Wissen und Denkvermögen”. Wie man in der <a href="https://dashboard.safe.ai/">Rangliste</a> sieht, sind große, proprietäre Modelle Open Modellen voraus.</p>
+<p>Benchmarks sind nützliche Orientierungshilfen, aber nehmen einem nicht vollständig die Entscheidung ab. Sie können anfällig für Overfitting sein (Modelle werden auf Benchmark-Performance optimiert), oder Daten aus Benchmarks sind in den Trainingsdaten enthalten (was die Ergebnisse verfälscht), bilden nicht alle vorstellbaren Aufgaben ab und sagen wenig über das Verhalten in spezifischen Anwendungsfällen aus. Für Self-Hosting-Projekte empfiehlt sich, Modelle auch anhand eigener, anwendungsspezifischer Tests zu evaluieren.</p>
+<h2 id="lizenzen"><a class="header" href="#lizenzen">Lizenzen</a></h2>
+<p>Bevor man ein selbst gehostetes Modell anderen zur Verfügung stellt oder in manchen Fallen sogar selbst nutzt, sollte man sich mit den Lizenzen von LLMs beschäftigen. Diese unterscheiden sich erheblich und geben vor wie die Modelle genutzt werden dürfen:</p>
+<ul>
+<li>
+<p><strong>Permissive Lizenzen</strong> (z.B. <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0</a>, <a href="https://opensource.org/license/mit">MIT</a>): Erlauben kommerzielle Nutzung, Modifikation und Weiterverbreitung mit minimalen Einschränkungen. Beispiele: Viele Modelle von <a href="https://huggingface.co/collections/mistralai/mistral-large-3">Mistral</a>, <a href="https://huggingface.co/collections/Qwen/qwen3">Qwen-Modelle</a> oder Modelle aus der <a href="https://huggingface.co/collections/openai/gpt-oss">GPT-OSS-Familie</a>.</p>
+</li>
+<li>
+<p><strong>Restriktive Lizenzen</strong>: Erlauben Nutzung und Modifikation, schränken aber kommerzielle Nutzung ein oder verlangen Lizenzgebühren ab einer bestimmten Nutzerzahl. Beispiel: <a href="https://ai.meta.com/llama/license/">Llama-2-Modelle</a> und <a href="https://www.llama.com/llama3/license/">Llama-3-Modelle</a>. Sehr restriktiv sind die Lizenzen bei multimodale LLama-3-Modellen [<a href="#weatherbed_meta_2024">weatherbed_meta_2024</a>] oder bei allen Llama-4-Modellen [<a href="#schwarze_meta_2025">schwarze_meta_2025</a>], da diese nicht in der EU verwendet werden dürfen.</p>
+</li>
+</ul>
+<p>Die Lizenzen sind in der Regel auf den Modell-Seiten bei Hugging Face oder auf den Websites der Entwickler dokumentiert.</p>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="hosting-software"><a class="header" href="#hosting-software">Hosting-Software</a></h1>
-<h2 id="was-wird-selbst-gehostet"><a class="header" href="#was-wird-selbst-gehostet">Was wird selbst gehostet?</a></h2>
-<p>Im Falle des Self-Hostings von LLM-Systemen stellt sich die Frage, welche Komponenten man neben dem LLM an sich selbst betreiben will. Hier lässt sich zwischen <strong>Frontend</strong> und <strong>Backend</strong> unterscheiden:</p>
+<h1 id="was-wird-wofür-selbst-gehostet"><a class="header" href="#was-wird-wofür-selbst-gehostet">Was wird (wofür) selbst gehostet?</a></h1>
+<p>Im Falle des Self-Hostings von LLM-Systemen stellt sich die Frage, welche Komponenten man neben dem LLM an sich selbst betreiben will. Dies hängt ähnlich wie die Auswahl des Modells vom konkreten Einsatzzweck ab. Der häufigste Wunsch ist eine Art privates Chat-GPT, also ein KI-Assistent mit unterschiedlichen Fähigkeiten mit dem man über eine grafische Oberfläche chatten kann. Während andere Arten von LLM-Systemen möglich sind, sollen hier die Komponenten eines solchen Assistenten beschrieben werden.</p>
+<p>Grundfunktionalitäten KI-Systeme sind oft:</p>
+<ul>
+<li>
+<p><strong>RAG</strong>: Bei RAG wird meistens <strong>semantische Suche</strong> verwendet. Dabei verarbeitet ein LLM Texte zu sogenannten Embeddings. Embeddings sind Vektoren, die den Textinhalt in numerischer Form repräsentieren. Diese Embeddings ermöglichen es, inhaltlich ähnliche Dokumente zu finden und dem LLM als Kontext bereitzustellen.</p>
+</li>
+<li>
+<p><strong>Tools</strong>: Hierbei handelt es sich eine dem LLM externe Code-Komponente, die das LLM über ein spezielles Interface (Heutzutage meistens <a href="https://modelcontextprotocol.io/docs/getting-started/intro">MCP</a>) nutzen kann.</p>
+</li>
+<li>
+<p><strong>Multimodalität</strong>: Es können auch Bilder oder PDFs hochgeladen werden, die Teil des Inputs an das LLM sind</p>
+</li>
+</ul>
+<p>Zunächst lässt sich zwischen <strong>Frontend</strong> (Die Software, die die Nutzer:in sieht und oft direkt im Browser läuft) und <strong>Backend</strong> (Software, mit der der Nutzer nicht direkt interagiert) unterscheiden.</p>
 <p><strong>Frontend</strong>: Meistens ein Chat Interface, über das Nutzer:innen Input an das LLM-System senden und Output anzeigen.</p>
-<p><strong>Backend</strong>: Kann mehrere Komponenten umfassen:</p>
+<p><strong>Backend</strong>:</p>
 <ul>
 <li><strong>Inference-Server</strong>: Software, auf der ein LLM betrieben wird. Auf solchen Servern können sowohl generative LLMs als auch Embedding-Modelle betrieben werden.</li>
-<li><strong>Vektor-Datenbank</strong>: Wird für RAG (Retrieval-Augmented Generation) benötigt. RAG ergänzt informationsbezogene Anfragen an das LLM mit relevanten Dokumenten aus einem Suchschritt mithilfe einer Datenbank.</li>
+<li><strong>Vektor-Datenbank</strong>: Wird für RAG (Retrieval-Augmented Generation) benötigt. RAG ergänzt informationsbezogene Anfragen an LLMs mit relevanten Dokumenten aus einem Suchschritt mithilfe einer Datenbank.</li>
 <li><strong>API Gateway</strong>: Verwaltet und standardisiert den Zugriff auf die Inference-Server</li>
+<li><strong>MCP-Server</strong>: Hier werden die Tools gehostet, die das LLM nutzen kann</li>
 <li>Zusätzliche Dienste wie Authentifizierung und Dateipeicher</li>
 </ul>
-<p><strong>RAG im Detail</strong>: Bei RAG wird semantische Suche verwendet. Dabei verarbeitet ein LLM Texte zu sogenannten Embeddings. Embeddings sind Vektoren, die den Textinhalt in numerischer Form repräsentieren. Diese Embeddings ermöglichen es, inhaltlich ähnliche Dokumente zu finden und dem LLM als Kontext bereitzustellen.</p>
-<ul>
-<li>many active open source solutions</li>
-</ul>
-<p><strong>Fig. 1</strong> zeigt ein konkretes Beispiel: Parrotpark<sup class="footnote-reference" id="fr-1-1-1"><a href="#footnote-1-1">1</a></sup>, ein komplett self-gehostetes LLM-System. Die Infrastruktur besteht aus zwei Servern:</p>
+<h2 id="parrotpark"><a class="header" href="#parrotpark">Parrotpark</a></h2>
+<p><strong>Fig. 1</strong> zeigt ein Beispiel für ein komplettes Setup. Parrotpark<sup class="footnote-reference" id="fr-1-1-1"><a href="#footnote-1-1">1</a></sup> besteht aus zwei Servern:</p>
 <ul>
 <li><strong>Eingangsserver</strong>: Permanenter Server, der Proxy, Datenbanken und einen Scheduler hostet</li>
 <li><strong>Ephemerer GPU Server</strong>: Wird vom Scheduler regelmäßig neu erstellt und hostet die rechenintensiven LLM-Komponenten</li>
-</ul>
-<p>Während nicht jedes Self-Hosting Setup so komplex sein muss, zeigt dieses Beispiel die verschiedenen Komponenten einer Komplettlösung.</p>
-<p><strong>Konkrete Software-Komponenten in Parrotpark</strong>:</p>
-<ul>
-<li><strong>Chat Interface</strong>: <a href="https://www.librechat.ai/">LibreChat</a></li>
-<li><strong>Inference-Server</strong>: <a href="https://docs.vllm.ai/en/latest/">vLLM</a> (für generatives LLM und Embedding-Modell)</li>
-<li><strong>Vektor-Datenbank</strong>: <a href="https://github.com/pgvector/pgvector">pgvector</a></li>
-<li><strong>API Gateway</strong>: <a href="https://www.litellm.ai/">LiteLLM</a> – ermöglicht mehr Kontrolle (z.B. Token-Verwaltung) und standardisiert die API</li>
-<li><strong>Authentifizierung</strong>: Keycloak für User-Verwaltung und SSO (Single Sign-On)</li>
-<li><strong>Anwendungsdatenbank</strong>: Speichert Chatverläufe und Nutzereinstellungen für LibreChat und LiteLLM</li>
-<li><strong>Proxy</strong>: Caddy – regelt SSL-Verschlüsselung für HTTPS und leitet Anfragen weiter</li>
-<li>S3-Buckets für Dateispeicherung, Scheduler für automatische Server-Verwaltung</li>
 </ul>
 <pre class="mermaid">flowchart LR
     Keycloak[Keycloak]
@@ -311,6 +327,40 @@
     Scheduler --&gt;|Erstellt periodisch| gpu
 </pre>
 
+<h2 id="open-source-software-für-llm-assistenten"><a class="header" href="#open-source-software-für-llm-assistenten">Open Source Software für LLM-Assistenten</a></h2>
+<p>Im Gegensatz zu den meisten Open LLMs ist die begleitende Software komplett Open Source. Am häufigsten wird solche Software über die ebenfalls Open Source Technologie der Containerisierung (mit <a href="https://www.docker.com/">Docker</a> und Docker Compose) betrieben. Bei Parrotpark eingesetzt und miteinander verbunden:</p>
+<ul>
+<li><strong>Chat Interface</strong>: <a href="https://www.librechat.ai/">LibreChat</a></li>
+<li><strong>Inference-Server</strong>: <a href="https://docs.vllm.ai/en/latest/">vLLM</a> (für generatives LLM und Embedding-Modell)</li>
+<li><strong>Vektor-Datenbank</strong>: <a href="https://github.com/pgvector/pgvector">pgvector</a></li>
+<li><strong>API Gateway</strong>: <a href="https://www.litellm.ai/">LiteLLM</a> – ermöglicht mehr Kontrolle (z.B. Token-Verwaltung) und standardisiert die API</li>
+<li><strong>Authentifizierung</strong>: <a href="https://www.keycloak.org/">Keycloak</a> für User-Verwaltung und SSO (Single Sign-On)</li>
+<li><strong>Anwendungsdatenbank</strong>: Speichert Chatverläufe und Nutzereinstellungen für LibreChat und LiteLLM</li>
+<li><strong>Proxy</strong>: <a href="https://caddyserver.com/">Caddy</a> – regelt SSL-Verschlüsselung für HTTPS und leitet Anfragen weiter</li>
+<li>S3-Buckets für Dateispeicherung, Scheduler für automatische Server-Verwaltung</li>
+</ul>
+<h2 id="übersicht-weiterer-open-source-software"><a class="header" href="#übersicht-weiterer-open-source-software">Übersicht weiterer Open-Source-Software</a></h2>
+<p>Neben den bei Parrotpark eingesetzten Komponenten gibt es zahlreiche weitere Open-Source-Alternativen für die verschiedenen Bereiche eines selbst gehosteten LLM-Systems:</p>
+<h3 id="chat-interface"><a class="header" href="#chat-interface">Chat Interface</a></h3>
+<ul>
+<li><strong><a href="https://github.com/open-webui/open-webui">Open WebUI</a></strong>: Vollständiges, selbst-hostbares Web-Interface mit ChatGPT-ähnlicher Oberfläche, Multi-User-Support, Dokumenten-Upload und RAG-Integration</li>
+<li><strong><a href="https://github.com/oobabooga/text-generation-webui">text-generation-webui</a></strong>: Feature-reiches Interface mit vielen Anpassungsmöglichkeiten, besonders für Power-User</li>
+</ul>
+<h3 id="inference-server"><a class="header" href="#inference-server">Inference Server</a></h3>
+<ul>
+<li><strong><a href="https://github.com/vllm-project/vllm">vLLM</a></strong>: Hochperformanter Inference-Server mit PagedAttention für effizientes Memory-Management.</li>
+<li><strong><a href="https://github.com/ollama/ollama">Ollama</a></strong>: Einfach zu nutzender Server mit One-Command-Installation und automatischem Modell-Download</li>
+<li><strong><a href="https://github.com/ggerganov/llama.cpp">llama.cpp</a></strong>: CPU-optimierter Inference-Server in C++, läuft auch ohne GPU</li>
+<li><strong><a href="https://lmstudio.ai/">LM Studio</a></strong>: Desktop-Anwendung mit GUI für lokales Modell-Management</li>
+<li><strong><a href="https://github.com/huggingface/text-generation-inference">TGI (Text Generation Inference)</a></strong>: Server von Hugging Face</li>
+</ul>
+<h3 id="vektor-datenbank"><a class="header" href="#vektor-datenbank">Vektor Datenbank</a></h3>
+<ul>
+<li><strong><a href="https://github.com/chroma-core/chroma">Chroma</a></strong></li>
+<li><strong><a href="https://github.com/qdrant/qdrant">Qdrant</a></strong></li>
+<li><strong><a href="https://github.com/milvus-io/milvus">Milvus</a></strong></li>
+<li><strong><a href="https://github.com/weaviate/weaviate">Weaviate</a></strong></li>
+</ul>
 <hr>
 <ol class="footnote-definition">
 <li id="footnote-1-1">
@@ -318,9 +368,9 @@
 </li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="hosting-infrastruktur"><a class="header" href="#hosting-infrastruktur">Hosting-Infrastruktur</a></h1>
-<p>LLMs lassen sich prinzipiell auf fast allen Arten von Infrastruktur betreiben – theoretisch sogar auf einem Raspberry Pi. Die praktisch erreichbare Geschwindigkeit, Modellqualität und Länge des In- und Outputs unterscheiden sich jedoch erheblich je nach Hardware. Dieses Kapitel beschreibt die Hardware-Anforderungen für LLM-Hosting, den damit verbundenen Ressourcenverbrauch und die verschiedenen Infrastruktur-Optionen von lokal bis Cloud.</p>
+<h1 id="worauf-wird-gehosted"><a href="#worauf-wird-gehosted" class="header">Worauf wird gehosted?</a></h1>
 <h2 id="worauf-wird-selbst-gehostet"><a class="header" href="#worauf-wird-selbst-gehostet">Worauf wird selbst gehostet?</a></h2>
+<p>LLMs lassen sich prinzipiell auf fast allen Arten von Infrastruktur betreiben – sogar auf einem <a href="https://www.maketecheasier.com/run-llm-on-raspberry-pi/">Raspberry Pi</a>. Die praktisch erreichbare Geschwindigkeit, Modellqualität und Länge des In- und Outputs unterscheiden sich jedoch erheblich je nach Hardware. Dieses Kapitel beschreibt die Hardware-Anforderungen für LLM-Hosting, den damit verbundenen Ressourcenverbrauch und die verschiedenen Infrastruktur-Optionen von lokal bis Cloud.</p>
 <p>Self-Hosting kann an verschiedenen Orten erfolgen:</p>
 <ul>
 <li><strong>Lokal (On-Premises)</strong>: Betrieb auf dem eigenen Laptop oder auf dedizierten Servern, die in den Räumlichkeiten einer Organisation oder Privatperson stehen. Dies bedeutet volle Kontrolle über das Setup, aber auch volle Verantwortung für Hardware und Wartung.</li>
@@ -403,7 +453,7 @@
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="über-das-material"><a class="header" href="#über-das-material">Über das Material</a></h1>
 <p>Die Inhalte dieser Seite wurden von Jonas Stettner (<a href="https://correlaid.org">CorrelAid e.V.</a>, tätig im <a href="https://civic-data.de">Civic Data Lab</a>) erstellt.</p>
-<p>Diese Seite sowie Code und Dateien der Experimente finden sich in einem <a href="https://github.com/CorrelAid/cdl_llm_hosting_material">GitHub Repository</a>.</p>
+<p>Der Source Code dieser Seite befindet sich in einem <a href="https://github.com/CorrelAid/cdl_llm_hosting_material">GitHub Repository</a>.</p>
 <h2 id="lizenz"><a class="header" href="#lizenz">Lizenz</a></h2>
 <p><a href="https://creativecommons.org/licenses/by/4.0/deed.de"><img src="https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg" alt="License: CC BY 4.0"></a></p>
 <ul>
@@ -412,7 +462,7 @@
 </ul>
 <h2 id="beitragen"><a class="header" href="#beitragen">Beitragen</a></h2>
 <p>Du möchtest etwas beitragen zu dieser Website? Darüber freuen wir uns sehr!</p>
-<p>Wenn du dich mit Git, GitHub und Markdown auskennst, freuen wir uns über einen Issue und dazugehörigen Pull Request im <a href="https://github.com/CorrelAid/cdl_llm_hosting_material">GitHub Repository</a>. Du hattest beim Lesen des vorherigen Satzes nur Fragezeichen und innere “hä?” Momente? Gar kein Problem! Schreib uns gern eine Email an <a href="mailto:leo.p@correlaid.org">jonas.s@correlaid.org</a> mit deinen Erkenntnissen. Wir kümmern uns dann um die Online-Stellung!</p>
+<p>Wenn du dich mit Git, GitHub und Markdown auskennst, freuen wir uns über einen Issue und dazugehörigen Pull Request im <a href="https://github.com/CorrelAid/cdl_llm_hosting_material">GitHub Repository</a>. Du hattest beim Lesen des vorherigen Satzes nur Fragezeichen und innere “hä?” Momente? Gar kein Problem! Schreib uns gern eine Email an <a href="mailto:jonas.s@correlaid.org">jonas.s@correlaid.org</a> mit deinen Erkenntnissen. Wir kümmern uns dann um die Online-Stellung!</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="literaturverzeichnis"><a class="header" href="#literaturverzeichnis">Literaturverzeichnis</a></h1>
 <script type="text/javascript">
@@ -470,6 +520,54 @@ function copyToClipboard(text) {
 </div>
 
 <br />
+<div class="bib_div">
+<details data-key="weatherbed_meta_2024" class="ref">
+<summary class="citation">
+<a id="weatherbed_meta_2024">[weatherbed_meta_2024]</a> - Weatherbed, Jess - <a href="https://www.theverge.com/2024/7/18/24201041/meta-multimodal-llama-ai-model-launch-eu-regulations" target="_blank"><cite>{Meta won't release its multimodal Llama AI model in the EU}</cite></a>. - 2024. -
+<button onclick="copyToClipboard(&#39;&#92;{&#92;{ #cite weatherbed_meta_2024 &#92;}&#92;}&#39;)">Copy citation_key</button>
+</summary>
+<section class="abstract">
+<h1>Summary/Abstract</h1>
+
+<div>N/A</div>
+
+</section>
+</details>
+</div>
+
+<br />
+<div class="bib_div">
+<details data-key="schwarze_meta_2025" class="ref">
+<summary class="citation">
+<a id="schwarze_meta_2025">[schwarze_meta_2025]</a> - Schwarze, Marcus - <a href="https://www.faz.net/pro/digitalwirtschaft/kuenstliche-intelligenz/meta-veroeffentlicht-llama-4-ausser-in-der-eu-110404782.html" target="_blank"><cite>{Meta veröffentlicht Llama 4 – außer in der EU}</cite></a>. - 2025. -
+<button onclick="copyToClipboard(&#39;&#92;{&#92;{ #cite schwarze_meta_2025 &#92;}&#92;}&#39;)">Copy citation_key</button>
+</summary>
+<section class="abstract">
+<h1>Summary/Abstract</h1>
+
+<div>N/A</div>
+
+</section>
+</details>
+</div>
+
+<br />
+<div class="bib_div">
+<details data-key="unesco_ethik_2023" class="ref">
+<summary class="citation">
+<a id="unesco_ethik_2023">[unesco_ethik_2023]</a> - {Deutsche UNESCO-Kommission}, {Niederländische UNESCO-Nationalkommission}, {Slowenische UNESCO-Nationalkommission} - <a href="https://www.unesco.de/dokumente-und-hintergruende/publikationen/detail/die-unesco-empfehlung-zur-ethik-der-kuenstlichen-intelligenz/" target="_blank"><cite>Zusammenfassung der UNESCO-Empfehlung zur Ethik der Künstlichen Intelligenz: Wegweiser für die Gestaltung unserer Zukunft</cite></a>. - 2023. -
+<button onclick="copyToClipboard(&#39;&#92;{&#92;{ #cite unesco_ethik_2023 &#92;}&#92;}&#39;)">Copy citation_key</button>
+</summary>
+<section class="abstract">
+<h1>Summary/Abstract</h1>
+
+<div>N/A</div>
+
+</section>
+</details>
+</div>
+
+<br />
 
                     </main>
 
@@ -494,6 +592,22 @@ function copyToClipboard(text) {
         <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
         <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
         <script>

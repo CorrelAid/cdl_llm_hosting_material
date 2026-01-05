@@ -18,9 +18,9 @@ Im Verlaufe dieses Materials wird aufeinander aufbauend in eine Reihe von Aspekt
 
 - Im [2. Kapitel](./02-software.md) werden die Fragen beantwortet: Was wird selbst gehostet, wie werden LLMs betrieben und welche Komponenten werden außer dem LLM benötigt? Hier werden  konkrete Software-Komponenten für die verschiedenen Teile eines LLM-Systems vorgestellt. Von Inference-Servern über Chat-Interfaces bis zu API-Gateways und Vektor-Datenbanken. Als praktisches Beispiel wird Parrotpark vorgestellt, ein vollständiges self-gehostetes LLM-System, das die Integration verschiedener Open-Source-Komponenten demonstriert.
 
-- Das [3. Kapitel]((./02-infra.md)) beantwortet die Frage: Worauf wird selbst gehostet? Das Kapitel enthält einen Vergleich zwischen den verschiedenen Infrastrukturoptionen. Außerdem behandelt das Kapitel  Hardware-Anforderungen (CPU vs. GPU, VRAM-Größen, GPU-Generationen) sowie Aspekte wie Ressourcenverbrauch und langfristige Kostenbetrachtungen.
+- Das [3. Kapitel](./02-infra.md) beantwortet die Frage: Worauf wird selbst gehostet? Das Kapitel enthält einen Vergleich zwischen den verschiedenen Infrastrukturoptionen. Außerdem behandelt das Kapitel  Hardware-Anforderungen (CPU vs. GPU, VRAM-Größen, GPU-Generationen) sowie Aspekte wie Ressourcenverbrauch und langfristige Kostenbetrachtungen.
 
 
-- In [Kapitel 4]((./03-alternatives.md)) werden Alternativen zum vollständigen Self-Hosting, einschließlich hybrider Ansätze und kommerzieller Lösungen mit verschiedenen Compliance-Leveln vorgestellt.
+- In [Kapitel 4](./03-alternatives.md) werden Alternativen zum vollständigen Self-Hosting, einschließlich hybrider Ansätze und kommerzieller Lösungen mit verschiedenen Compliance-Leveln vorgestellt.
 
 [^1]: Die Slides des Vortrags lassen sich [hier](https://correlaid.github.io/datenfestival_ap3_session/) finden, begleitender Code [hier](https://github.com/CorrelAid/datenfestival_ap3_session).

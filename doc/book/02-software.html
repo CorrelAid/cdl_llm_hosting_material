@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ad046a64.js";
+            window.path_to_searchindex_js = "searchindex-a2075c5c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-64f8deb7.js"></script>
@@ -174,37 +174,35 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="hosting-software"><a class="header" href="#hosting-software">Hosting-Software</a></h1>
-<h2 id="was-wird-selbst-gehostet"><a class="header" href="#was-wird-selbst-gehostet">Was wird selbst gehostet?</a></h2>
-<p>Im Falle des Self-Hostings von LLM-Systemen stellt sich die Frage, welche Komponenten man neben dem LLM an sich selbst betreiben will. Hier lässt sich zwischen <strong>Frontend</strong> und <strong>Backend</strong> unterscheiden:</p>
+                        <h1 id="was-wird-wofür-selbst-gehostet"><a class="header" href="#was-wird-wofür-selbst-gehostet">Was wird (wofür) selbst gehostet?</a></h1>
+<p>Im Falle des Self-Hostings von LLM-Systemen stellt sich die Frage, welche Komponenten man neben dem LLM an sich selbst betreiben will. Dies hängt ähnlich wie die Auswahl des Modells vom konkreten Einsatzzweck ab. Der häufigste Wunsch ist eine Art privates Chat-GPT, also ein KI-Assistent mit unterschiedlichen Fähigkeiten mit dem man über eine grafische Oberfläche chatten kann. Während andere Arten von LLM-Systemen möglich sind, sollen hier die Komponenten eines solchen Assistenten beschrieben werden.</p>
+<p>Grundfunktionalitäten KI-Systeme sind oft:</p>
+<ul>
+<li>
+<p><strong>RAG</strong>: Bei RAG wird meistens <strong>semantische Suche</strong> verwendet. Dabei verarbeitet ein LLM Texte zu sogenannten Embeddings. Embeddings sind Vektoren, die den Textinhalt in numerischer Form repräsentieren. Diese Embeddings ermöglichen es, inhaltlich ähnliche Dokumente zu finden und dem LLM als Kontext bereitzustellen.</p>
+</li>
+<li>
+<p><strong>Tools</strong>: Hierbei handelt es sich eine dem LLM externe Code-Komponente, die das LLM über ein spezielles Interface (Heutzutage meistens <a href="https://modelcontextprotocol.io/docs/getting-started/intro">MCP</a>) nutzen kann.</p>
+</li>
+<li>
+<p><strong>Multimodalität</strong>: Es können auch Bilder oder PDFs hochgeladen werden, die Teil des Inputs an das LLM sind</p>
+</li>
+</ul>
+<p>Zunächst lässt sich zwischen <strong>Frontend</strong> (Die Software, die die Nutzer:in sieht und oft direkt im Browser läuft) und <strong>Backend</strong> (Software, mit der der Nutzer nicht direkt interagiert) unterscheiden.</p>
 <p><strong>Frontend</strong>: Meistens ein Chat Interface, über das Nutzer:innen Input an das LLM-System senden und Output anzeigen.</p>
-<p><strong>Backend</strong>: Kann mehrere Komponenten umfassen:</p>
+<p><strong>Backend</strong>:</p>
 <ul>
 <li><strong>Inference-Server</strong>: Software, auf der ein LLM betrieben wird. Auf solchen Servern können sowohl generative LLMs als auch Embedding-Modelle betrieben werden.</li>
-<li><strong>Vektor-Datenbank</strong>: Wird für RAG (Retrieval-Augmented Generation) benötigt. RAG ergänzt informationsbezogene Anfragen an das LLM mit relevanten Dokumenten aus einem Suchschritt mithilfe einer Datenbank.</li>
+<li><strong>Vektor-Datenbank</strong>: Wird für RAG (Retrieval-Augmented Generation) benötigt. RAG ergänzt informationsbezogene Anfragen an LLMs mit relevanten Dokumenten aus einem Suchschritt mithilfe einer Datenbank.</li>
 <li><strong>API Gateway</strong>: Verwaltet und standardisiert den Zugriff auf die Inference-Server</li>
+<li><strong>MCP-Server</strong>: Hier werden die Tools gehostet, die das LLM nutzen kann</li>
 <li>Zusätzliche Dienste wie Authentifizierung und Dateipeicher</li>
 </ul>
-<p><strong>RAG im Detail</strong>: Bei RAG wird semantische Suche verwendet. Dabei verarbeitet ein LLM Texte zu sogenannten Embeddings. Embeddings sind Vektoren, die den Textinhalt in numerischer Form repräsentieren. Diese Embeddings ermöglichen es, inhaltlich ähnliche Dokumente zu finden und dem LLM als Kontext bereitzustellen.</p>
-<ul>
-<li>many active open source solutions</li>
-</ul>
-<p><strong>Fig. 1</strong> zeigt ein konkretes Beispiel: Parrotpark<sup class="footnote-reference" id="fr-1-1"><a href="#footnote-1">1</a></sup>, ein komplett self-gehostetes LLM-System. Die Infrastruktur besteht aus zwei Servern:</p>
+<h2 id="parrotpark"><a class="header" href="#parrotpark">Parrotpark</a></h2>
+<p><strong>Fig. 1</strong> zeigt ein Beispiel für ein komplettes Setup. Parrotpark<sup class="footnote-reference" id="fr-1-1"><a href="#footnote-1">1</a></sup> besteht aus zwei Servern:</p>
 <ul>
 <li><strong>Eingangsserver</strong>: Permanenter Server, der Proxy, Datenbanken und einen Scheduler hostet</li>
 <li><strong>Ephemerer GPU Server</strong>: Wird vom Scheduler regelmäßig neu erstellt und hostet die rechenintensiven LLM-Komponenten</li>
-</ul>
-<p>Während nicht jedes Self-Hosting Setup so komplex sein muss, zeigt dieses Beispiel die verschiedenen Komponenten einer Komplettlösung.</p>
-<p><strong>Konkrete Software-Komponenten in Parrotpark</strong>:</p>
-<ul>
-<li><strong>Chat Interface</strong>: <a href="https://www.librechat.ai/">LibreChat</a></li>
-<li><strong>Inference-Server</strong>: <a href="https://docs.vllm.ai/en/latest/">vLLM</a> (für generatives LLM und Embedding-Modell)</li>
-<li><strong>Vektor-Datenbank</strong>: <a href="https://github.com/pgvector/pgvector">pgvector</a></li>
-<li><strong>API Gateway</strong>: <a href="https://www.litellm.ai/">LiteLLM</a> – ermöglicht mehr Kontrolle (z.B. Token-Verwaltung) und standardisiert die API</li>
-<li><strong>Authentifizierung</strong>: Keycloak für User-Verwaltung und SSO (Single Sign-On)</li>
-<li><strong>Anwendungsdatenbank</strong>: Speichert Chatverläufe und Nutzereinstellungen für LibreChat und LiteLLM</li>
-<li><strong>Proxy</strong>: Caddy – regelt SSL-Verschlüsselung für HTTPS und leitet Anfragen weiter</li>
-<li>S3-Buckets für Dateispeicherung, Scheduler für automatische Server-Verwaltung</li>
 </ul>
 <pre class="mermaid">flowchart LR
     Keycloak[Keycloak]
@@ -233,6 +231,40 @@
     Scheduler --&gt;|Erstellt periodisch| gpu
 </pre>
 
+<h2 id="open-source-software-für-llm-assistenten"><a class="header" href="#open-source-software-für-llm-assistenten">Open Source Software für LLM-Assistenten</a></h2>
+<p>Im Gegensatz zu den meisten Open LLMs ist die begleitende Software komplett Open Source. Am häufigsten wird solche Software über die ebenfalls Open Source Technologie der Containerisierung (mit <a href="https://www.docker.com/">Docker</a> und Docker Compose) betrieben. Bei Parrotpark eingesetzt und miteinander verbunden:</p>
+<ul>
+<li><strong>Chat Interface</strong>: <a href="https://www.librechat.ai/">LibreChat</a></li>
+<li><strong>Inference-Server</strong>: <a href="https://docs.vllm.ai/en/latest/">vLLM</a> (für generatives LLM und Embedding-Modell)</li>
+<li><strong>Vektor-Datenbank</strong>: <a href="https://github.com/pgvector/pgvector">pgvector</a></li>
+<li><strong>API Gateway</strong>: <a href="https://www.litellm.ai/">LiteLLM</a> – ermöglicht mehr Kontrolle (z.B. Token-Verwaltung) und standardisiert die API</li>
+<li><strong>Authentifizierung</strong>: <a href="https://www.keycloak.org/">Keycloak</a> für User-Verwaltung und SSO (Single Sign-On)</li>
+<li><strong>Anwendungsdatenbank</strong>: Speichert Chatverläufe und Nutzereinstellungen für LibreChat und LiteLLM</li>
+<li><strong>Proxy</strong>: <a href="https://caddyserver.com/">Caddy</a> – regelt SSL-Verschlüsselung für HTTPS und leitet Anfragen weiter</li>
+<li>S3-Buckets für Dateispeicherung, Scheduler für automatische Server-Verwaltung</li>
+</ul>
+<h2 id="übersicht-weiterer-open-source-software"><a class="header" href="#übersicht-weiterer-open-source-software">Übersicht weiterer Open-Source-Software</a></h2>
+<p>Neben den bei Parrotpark eingesetzten Komponenten gibt es zahlreiche weitere Open-Source-Alternativen für die verschiedenen Bereiche eines selbst gehosteten LLM-Systems:</p>
+<h3 id="chat-interface"><a class="header" href="#chat-interface">Chat Interface</a></h3>
+<ul>
+<li><strong><a href="https://github.com/open-webui/open-webui">Open WebUI</a></strong>: Vollständiges, selbst-hostbares Web-Interface mit ChatGPT-ähnlicher Oberfläche, Multi-User-Support, Dokumenten-Upload und RAG-Integration</li>
+<li><strong><a href="https://github.com/oobabooga/text-generation-webui">text-generation-webui</a></strong>: Feature-reiches Interface mit vielen Anpassungsmöglichkeiten, besonders für Power-User</li>
+</ul>
+<h3 id="inference-server"><a class="header" href="#inference-server">Inference Server</a></h3>
+<ul>
+<li><strong><a href="https://github.com/vllm-project/vllm">vLLM</a></strong>: Hochperformanter Inference-Server mit PagedAttention für effizientes Memory-Management.</li>
+<li><strong><a href="https://github.com/ollama/ollama">Ollama</a></strong>: Einfach zu nutzender Server mit One-Command-Installation und automatischem Modell-Download</li>
+<li><strong><a href="https://github.com/ggerganov/llama.cpp">llama.cpp</a></strong>: CPU-optimierter Inference-Server in C++, läuft auch ohne GPU</li>
+<li><strong><a href="https://lmstudio.ai/">LM Studio</a></strong>: Desktop-Anwendung mit GUI für lokales Modell-Management</li>
+<li><strong><a href="https://github.com/huggingface/text-generation-inference">TGI (Text Generation Inference)</a></strong>: Server von Hugging Face</li>
+</ul>
+<h3 id="vektor-datenbank"><a class="header" href="#vektor-datenbank">Vektor Datenbank</a></h3>
+<ul>
+<li><strong><a href="https://github.com/chroma-core/chroma">Chroma</a></strong></li>
+<li><strong><a href="https://github.com/qdrant/qdrant">Qdrant</a></strong></li>
+<li><strong><a href="https://github.com/milvus-io/milvus">Milvus</a></strong></li>
+<li><strong><a href="https://github.com/weaviate/weaviate">Weaviate</a></strong></li>
+</ul>
 <hr>
 <ol class="footnote-definition">
 <li id="footnote-1">
@@ -275,6 +307,22 @@
         <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
         <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
         <script>
