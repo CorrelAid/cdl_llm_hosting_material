@@ -72,11 +72,8 @@ jobs:
         run: cargo install --version 0.14.0 mdbook-mermaid
       
       - name: Install mdbook-bib
-        run: cargo install mdbook-bib
-
-      # - name: Install mdbook-admonish
-      #   run: cargo install --force mdbook-admonish
-
+        run: cargo install --version 0.5.0 mdbook-bib
+        
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
