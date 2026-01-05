@@ -15,4 +15,4 @@ Der Source Code dieser Seite befindet sich in einem [GitHub Repository](https://
 
 Du möchtest etwas beitragen zu dieser Website? Darüber freuen wir uns sehr!
 
-Wenn du dich mit Git, GitHub und Markdown auskennst, freuen wir uns über einen Issue und dazugehörigen Pull Request im [GitHub Repository](https://github.com/CorrelAid/cdl_llm_hosting_material). Du hattest beim Lesen des vorherigen Satzes nur Fragezeichen und innere “hä?” Momente? Gar kein Problem! Schreib uns gern eine Email an [jonas.s@correlaid.org](mailto:jonas.s@correlaid.org) mit deinen Erkenntnissen. Wir kümmern uns dann um die Online-Stellung!
+Wenn du dich mit Git, GitHub und Markdown auskennst, freuen wir uns über einen Issue und dazugehörigen Pull Request im [GitHub Repository](https://github.com/CorrelAid/cdl_llm_hosting_material). Du hattest beim Lesen des vorherigen Satzes nur Fragezeichen und innere "Hä?"-Momente? Gar kein Problem! Schreib uns gern eine Email an [jonas.s@correlaid.org](mailto:jonas.s@correlaid.org) mit deinen Erkenntnissen. Wir kümmern uns dann um die Online-Stellung!

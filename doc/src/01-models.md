@@ -2,13 +2,13 @@
 
 ## Was ist ein LLM?
 
-LLMs (Large Language Models) sind große neuronalen Netzwerke. Das ist eine Struktur aus vielen miteinander verbundene Schichten aus Modellen biologischer Neuronen (basierend auf dem, was 1943 über Neuronen bekannt war) {{#cite mcculloch_logical_1943}}. Diese Neuronenmodelle führen einzelne Rechnungen aus, bei denen konfigurierbare Parameter verwendet werden. Beim Training von LLMs werden Millionen oder sogar Milliarden dieser Parameter nach und nach angepasst, bis der Output des Modells den Trainingsdaten entspricht. 
+LLMs (Large Language Models) sind große neuronale Netzwerke. Das ist eine Struktur aus vielen miteinander verbundenen Schichten aus Modellen biologischer Neuronen (basierend auf dem, was 1943 über Neuronen bekannt war) {{#cite mcculloch_logical_1943}}. Diese Neuronenmodelle führen einzelne Rechnungen aus, bei denen konfigurierbare Parameter verwendet werden. Beim Training von LLMs werden Millionen oder sogar Milliarden dieser Parameter nach und nach angepasst, bis der Output des Modells den Trainingsdaten entspricht. 
 
-Die bekanntesten LLMs sind **generativ**, haben also als Input und als Output (mindestens) Text. Andere LLMs haben als Output Zahlen in Form von Vektoren, der den Text-Input semantisch repräsentieren soll, sogenannte **Embeddings**. **Multimodale LLMs** können z.B. auch Bilder verarbeiten und deren Inhalt sprachlich repräsentieren. 
+Die bekanntesten LLMs sind **generativ**, haben also als Input und als Output (mindestens) Text. Andere LLMs haben als Output Zahlen in Form von Vektoren, die den Text-Input semantisch repräsentieren sollen, sogenannte **Embeddings**. **Multimodale LLMs** können z.B. auch Bilder verarbeiten und deren Inhalt sprachlich repräsentieren. 
 
 Generell wird der Output hergestellt durch zahlreiche Matrizenrechnungen, die sich besonders effizient auf spezialisierter Hardware wie GPUs (Graphics Processing Unit/Grafikkarten) ausführen lassen, da sie dort in großer Zahl gleichzeitig passieren können. 
 
-Modelle können als Dateien verfügbar gemacht werden, die sowohl die Architektur als auch die trainierten Parameter eines Modells enthalten und somit selbst betrieven werden können. Für das Self-Hosting von LLMs stehen zahlreiche solcher Modelle zur Verfügung. Dieses Kapitel gibt einen Überblick über die wichtigsten Aspekte bei der Modellauswahl und -bewertung.
+Modelle können als Dateien verfügbar gemacht werden, die sowohl die Architektur als auch die trainierten Parameter eines Modells enthalten und somit selbst betrieben werden können. Für das Self-Hosting von LLMs stehen zahlreiche solcher Modelle zur Verfügung. Dieses Kapitel gibt einen Überblick über die wichtigsten Aspekte bei der Modellauswahl und -bewertung.
 
 ## Open Weight vs. Open Source
 
@@ -29,7 +29,6 @@ Die Zahl der Open Modelle nahm in den letzten Jahren rasant zu. Die meisten der 
 - **OpenAI**: [gpt-oss](https://openai.com/index/introducing-gpt-oss/)
 
 - **Allen Institute for Artificial Intelligence**: [Olmo](https://allenai.org/olmo)
-
 
 ## Hugging Face: Wo findet man Open Modelle und in welchen Varianten gibt es sie?
 
@@ -60,22 +59,22 @@ Für Self-Hosting sind quantisierte Modelle oft die einzige praktikable Option. 
 
 ## Auswahl von Modellen - Evaluation von LLMs
 
-LLMs zu evaluieren ist aufgrund der Größe ihres Einsatzgebietes und der Art ihrer Fähigkeiten keine einfache Aufgabe. LLMs sind als Teil des Gebiets des Machine Learning eine KI-Technologie. Künstliche Intelligenz heißt so, weil diese Technologie in Relation zur menschlichen Intelligenz gestellt wird: es besteht Ähnlichkeit bei Zielen, Herstellung oder Funktionsweise (bei Komponenten) von Intelligenz {{#cite unesco_ethik_2023}}. Misst man bei der Evaluation von LLMs deren Intelligenz? Das ist mindestens umstritten.
+LLMs zu evaluieren ist aufgrund der Größe ihres Einsatzgebiets und der Art ihrer Fähigkeiten keine einfache Aufgabe. LLMs sind als Teil des Gebiets des Machine Learning eine KI-Technologie. Künstliche Intelligenz heißt so, weil diese Technologie in Relation zur menschlichen Intelligenz gestellt wird: Es besteht Ähnlichkeit bei Zielen, Herstellung oder Funktionsweise (bei Komponenten) von Intelligenz {{#cite unesco_ethik_2023}}. Misst man bei der Evaluation von LLMs deren Intelligenz? Das ist mindestens umstritten.
 
-Eine pragmatische Herangehensweise setzt bei der konkreten Aufgabe an, die ein LLM erfüllen soll. Will man es z.B. zur Klassifikation deutscher Texte verwenden, kann man herkömmliche Metriken den [F-Score](https://de.wikipedia.org/wiki/Beurteilung_eines_bin%C3%A4ren_Klassifikators#Kombinierte_Ma%C3%9Fe) nutzen. Hat man bereits klassifizierte Texte, kann man Modelle selbst testen. 
+Eine pragmatische Herangehensweise setzt bei der konkreten Aufgabe an, die ein LLM erfüllen soll. Will man es z.B. zur Klassifikation deutscher Texte verwenden, kann man herkömmliche Metriken wie den [F-Score](https://de.wikipedia.org/wiki/Beurteilung_eines_bin%C3%A4ren_Klassifikators#Kombinierte_Ma%C3%9Fe) nutzen. Hat man bereits klassifizierte Texte, kann man Modelle selbst testen. 
 
-Man kann sich jedoch auch an vorhandenen aufgabenbezogene Benchmarks orientieren. Ein Beispiel dafür ist [`languagebench`](https://huggingface.co/spaces/fair-forward/languagebench), das neben Tasks wie Klassifikation auch zwischen der Performance auf unterschiedlichen Sprachen unterscheidet. 
+Man kann sich jedoch auch an vorhandenen aufgabenbezogenen Benchmarks orientieren. Ein Beispiel dafür ist [`languagebench`](https://huggingface.co/spaces/fair-forward/languagebench), das neben Tasks wie Klassifikation auch zwischen der Performance auf unterschiedlichen Sprachen unterscheidet. 
 
-Andere vorhande Benchmarks testen LLMs auf einem breiteren, mehr mit Intelligenz verbundenen Level. [Humanities Last Exam](https://agi.safe.ai/) enthält Problemstellungen in akademischen Disziplinen. Auch wenn es sich um einen provokanten Titel handelt, schreiben die Urheber:innen des Tests, dass es sich um keinen generellen Test auf Intelligenz handele, sondern um eine "gezielte Messung von technischem Wissen und Denkvermögen". Wie man in der [Rangliste](https://dashboard.safe.ai/) sieht, sind große, proprietäre Modelle Open Modellen voraus. 
+Andere vorhandene Benchmarks testen LLMs auf einem breiteren, mehr mit Intelligenz verbundenen Level. [Humanities Last Exam](https://agi.safe.ai/) enthält Problemstellungen in akademischen Disziplinen. Auch wenn es sich um einen provokanten Titel handelt, schreiben die Urheber:innen des Tests, dass es sich um keinen generellen Test auf Intelligenz handele, sondern um eine "gezielte Messung von technischem Wissen und Denkvermögen". Wie man in der [Rangliste](https://dashboard.safe.ai/) sieht, sind große, proprietäre Modelle Open Modellen voraus. 
 
 Benchmarks sind nützliche Orientierungshilfen, aber nehmen einem nicht vollständig die Entscheidung ab. Sie können anfällig für Overfitting sein (Modelle werden auf Benchmark-Performance optimiert), oder Daten aus Benchmarks sind in den Trainingsdaten enthalten (was die Ergebnisse verfälscht), bilden nicht alle vorstellbaren Aufgaben ab und sagen wenig über das Verhalten in spezifischen Anwendungsfällen aus. Für Self-Hosting-Projekte empfiehlt sich, Modelle auch anhand eigener, anwendungsspezifischer Tests zu evaluieren.
 
 ## Lizenzen
 
-Bevor man ein selbst gehostetes Modell anderen zur Verfügung stellt oder in manchen Fallen sogar selbst nutzt, sollte man sich mit den Lizenzen von LLMs beschäftigen. Diese unterscheiden sich erheblich und geben vor wie die Modelle genutzt werden dürfen:
+Bevor man ein selbst gehostetes Modell anderen zur Verfügung stellt oder in manchen Fällen sogar selbst nutzt, sollte man sich mit den Lizenzen von LLMs beschäftigen. Diese unterscheiden sich erheblich und geben vor wie die Modelle genutzt werden dürfen:
 
 - **Permissive Lizenzen** (z.B. [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.html), [MIT](https://opensource.org/license/mit)): Erlauben kommerzielle Nutzung, Modifikation und Weiterverbreitung mit minimalen Einschränkungen. Beispiele: Viele Modelle von [Mistral](https://huggingface.co/collections/mistralai/mistral-large-3), [Qwen-Modelle](https://huggingface.co/collections/Qwen/qwen3) oder Modelle aus der [GPT-OSS-Familie](https://huggingface.co/collections/openai/gpt-oss).
 
-- **Restriktive Lizenzen**: Erlauben Nutzung und Modifikation, schränken aber kommerzielle Nutzung ein oder verlangen Lizenzgebühren ab einer bestimmten Nutzerzahl. Beispiel: [Llama-2-Modelle](https://ai.meta.com/llama/license/) und [Llama-3-Modelle](https://www.llama.com/llama3/license/). Sehr restriktiv sind die Lizenzen bei multimodale LLama-3-Modellen {{#cite weatherbed_meta_2024}} oder bei allen Llama-4-Modellen {{#cite schwarze_meta_2025}}, da diese nicht in der EU verwendet werden dürfen.
+- **Restriktive Lizenzen**: Erlauben Nutzung und Modifikation, schränken aber kommerzielle Nutzung ein oder verlangen Lizenzgebühren ab einer bestimmten Nutzerzahl. Beispiel: [Llama-2-Modelle](https://ai.meta.com/llama/license/) und [Llama-3-Modelle](https://www.llama.com/llama3/license/). Sehr restriktiv sind die Lizenzen bei multimodalen Llama-3-Modellen {{#cite weatherbed_meta_2024}} oder bei allen Llama-4-Modellen {{#cite schwarze_meta_2025}}, da diese nicht in der EU verwendet werden dürfen.
 
 Die Lizenzen sind in der Regel auf den Modell-Seiten bei Hugging Face oder auf den Websites der Entwickler dokumentiert.

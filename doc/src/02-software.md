@@ -3,15 +3,15 @@
 
 Im Falle des Self-Hostings von LLM-Systemen stellt sich die Frage, welche Komponenten man neben dem LLM an sich selbst betreiben will. Dies hängt ähnlich wie die Auswahl des Modells vom konkreten Einsatzzweck ab. Der häufigste Wunsch ist eine Art privates Chat-GPT, also ein KI-Assistent mit unterschiedlichen Fähigkeiten mit dem man über eine grafische Oberfläche chatten kann. Während andere Arten von LLM-Systemen möglich sind, sollen hier die Komponenten eines solchen Assistenten beschrieben werden. 
 
-Grundfunktionalitäten KI-Systeme sind oft:
+Grundfunktionalitäten solcher KI-Systeme sind oft:
 
 - **RAG**: Bei RAG wird meistens **semantische Suche** verwendet. Dabei verarbeitet ein LLM Texte zu sogenannten Embeddings. Embeddings sind Vektoren, die den Textinhalt in numerischer Form repräsentieren. Diese Embeddings ermöglichen es, inhaltlich ähnliche Dokumente zu finden und dem LLM als Kontext bereitzustellen.
 
-- **Tools**: Hierbei handelt es sich eine dem LLM externe Code-Komponente, die das LLM über ein spezielles Interface (Heutzutage meistens [MCP](https://modelcontextprotocol.io/docs/getting-started/intro)) nutzen kann.
+- **Tools**: Hierbei handelt es sich um eine dem LLM externe Code-Komponente, die das LLM über ein spezielles Interface (heutzutage meistens [MCP](https://modelcontextprotocol.io/docs/getting-started/intro)) nutzen kann.
 
 - **Multimodalität**: Es können auch Bilder oder PDFs hochgeladen werden, die Teil des Inputs an das LLM sind
 
-Zunächst lässt sich zwischen **Frontend** (Die Software, die die Nutzer:in sieht und oft direkt im Browser läuft) und **Backend** (Software, mit der der Nutzer nicht direkt interagiert) unterscheiden.
+Zunächst lässt sich zwischen **Frontend** (die Software, die Nutzer:innen sehen und oft direkt im Browser läuft) und **Backend** (Software, mit der Nutzer:innen nicht direkt interagieren) unterscheiden.
 
 **Frontend**: Meistens ein Chat Interface, über das Nutzer:innen Input an das LLM-System senden und Output anzeigen.
 
@@ -25,7 +25,7 @@ Zunächst lässt sich zwischen **Frontend** (Die Software, die die Nutzer:in sie
 
 ## Parrotpark
 
-**Fig. 1** zeigt ein Beispiel für ein komplettes Setup. Parrotpark[^1] besteht aus zwei Servern:
+**Fig. 1** zeigt ein Beispiel für ein vollständiges Setup. Parrotpark[^1] besteht aus zwei Servern:
 
 - **Eingangsserver**: Permanenter Server, der Proxy, Datenbanken und einen Scheduler hostet
 - **Ephemerer GPU Server**: Wird vom Scheduler regelmäßig neu erstellt und hostet die rechenintensiven LLM-Komponenten
