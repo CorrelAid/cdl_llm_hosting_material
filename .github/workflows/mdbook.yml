@@ -78,7 +78,7 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
       - name: Build with mdBook
-        run: mdbook build doc
+        run: RUST_LOG=debug mdbook build doc
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
