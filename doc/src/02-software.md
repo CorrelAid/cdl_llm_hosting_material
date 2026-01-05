@@ -1,5 +1,20 @@
 # Hosting-Software
 
+## Was wird selbst gehostet?
+
+Im Falle des Self-Hostings von LLM-Systemen stellt sich die Frage, welche Komponenten man neben dem LLM an sich selbst betreiben will. Hier lässt sich zwischen **Frontend** und **Backend** unterscheiden:
+
+**Frontend**: Meistens ein Chat Interface, über das Nutzer:innen Input an das LLM-System senden und Output anzeigen.
+
+**Backend**: Kann mehrere Komponenten umfassen:
+- **Inference-Server**: Software, auf der ein LLM betrieben wird. Auf solchen Servern können sowohl generative LLMs als auch Embedding-Modelle betrieben werden.
+- **Vektor-Datenbank**: Wird für RAG (Retrieval-Augmented Generation) benötigt. RAG ergänzt informationsbezogene Anfragen an das LLM mit relevanten Dokumenten aus einem Suchschritt mithilfe einer Datenbank.
+- **API Gateway**: Verwaltet und standardisiert den Zugriff auf die Inference-Server
+- Zusätzliche Dienste wie Authentifizierung und Dateipeicher
+
+**RAG im Detail**: Bei RAG wird semantische Suche verwendet. Dabei verarbeitet ein LLM Texte zu sogenannten Embeddings. Embeddings sind Vektoren, die den Textinhalt in numerischer Form repräsentieren. Diese Embeddings ermöglichen es, inhaltlich ähnliche Dokumente zu finden und dem LLM als Kontext bereitzustellen.
+
+
 
 - many active open source solutions
 

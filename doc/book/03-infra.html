@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Alternativen und Vergleich - LLM-Hosting</title>
+        <title>Worauf wird gehosted? - LLM-Hosting</title>
 
 
         <!-- Custom HTML head -->
@@ -35,10 +35,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3d607139.js";
+            window.path_to_searchindex_js = "searchindex-ad046a64.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-29b41a76.js"></script>
+        <script src="toc-64f8deb7.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -174,17 +174,61 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="alternativen-und-vergleich"><a class="header" href="#alternativen-und-vergleich">Alternativen und Vergleich</a></h1>
+                        <h1 id="hosting-infrastruktur"><a class="header" href="#hosting-infrastruktur">Hosting-Infrastruktur</a></h1>
+<p>LLMs lassen sich prinzipiell auf fast allen Arten von Infrastruktur betreiben – theoretisch sogar auf einem Raspberry Pi. Die praktisch erreichbare Geschwindigkeit, Modellqualität und Länge des In- und Outputs unterscheiden sich jedoch erheblich je nach Hardware. Dieses Kapitel beschreibt die Hardware-Anforderungen für LLM-Hosting, den damit verbundenen Ressourcenverbrauch und die verschiedenen Infrastruktur-Optionen von lokal bis Cloud.</p>
+<h2 id="worauf-wird-selbst-gehostet"><a class="header" href="#worauf-wird-selbst-gehostet">Worauf wird selbst gehostet?</a></h2>
+<p>Self-Hosting kann an verschiedenen Orten erfolgen:</p>
+<ul>
+<li><strong>Lokal (On-Premises)</strong>: Betrieb auf dem eigenen Laptop oder auf dedizierten Servern, die in den Räumlichkeiten einer Organisation oder Privatperson stehen. Dies bedeutet volle Kontrolle über das Setup, aber auch volle Verantwortung für Hardware und Wartung.</li>
+<li><strong>Cloud</strong>: Server werden in verschiedenen Formen von Cloud-Providern zur Miete angeboten – entweder als virtualisierte Maschine (VM) oder als dedizierte physische Maschine (Bare Metal). Flexibel skalierbar, aber mit laufenden Kosten.</li>
+<li><strong>Hybrid (Co-Hosting)</strong>: Kauf eigener Server, die jedoch in den Räumen eines Cloud-Providers betrieben und gewartet werden. Kombination aus Eigentum und professioneller Infrastruktur.</li>
+</ul>
+<h2 id="hardware-anforderungen"><a class="header" href="#hardware-anforderungen">Hardware-Anforderungen</a></h2>
+<h3 id="cpu-vs-gpu"><a class="header" href="#cpu-vs-gpu">CPU vs GPU</a></h3>
+<p>Für das Hosting von LLMs stellt sich zunächst die grundlegende Frage: CPU oder GPU?</p>
+<p><strong>CPU-Inferenz</strong> ist möglich und für sehr kleine Modelle oder Testszenarien praktikabel. Moderne CPUs können kleine quantisierte Modelle durchaus betreiben. Die Inferenz ist deutlich langsamer als auf GPUs, was für produktive Systeme mit Nutzerinteraktion meist inakzeptabel ist.</p>
+<p><strong>GPU-Inferenz</strong> ist für Self-Hosting von LLMs praktisch der Standard. GPUs sind für die massiv parallelen Matrizenoperationen optimiert, die bei der Textgenerierung anfallen, wewegen die Geschwindigkeitsunterschiede immens sind.</p>
+<p><strong>Marktlage</strong>: Der GPU-Markt für LLM-Inferenz wird dominiert von <strong>NVIDIA</strong>, deren CUDA-Ökosystem den De-facto-Standard darstellt. Die meisten Inference-Server und ML-Frameworks sind primär für NVIDIA-GPUs optimiert. <strong>AMD</strong> holt jedoch auf: ROCm (AMDs Alternative zu CUDA) wird zunehmend besser unterstützt, und AMD-GPUs bieten oft ein besseres Preis-Leistungs-Verhältnis. Für kritische Produktivsysteme ist NVIDIA derzeit die sicherere Wahl, für experimentelle Setups kann AMD eine kostengünstige Alternative sein.</p>
+<h3 id="gpu-spezifikationen"><a class="header" href="#gpu-spezifikationen">GPU-Spezifikationen</a></h3>
+<p>Bei der Auswahl von GPUs für LLM-Hosting sind mehrere Faktoren entscheidend:</p>
+<p><strong>VRAM-Größe</strong>: Der GPU-Speicher (VRAM) ist oft der limitierende Faktor. Ein Modell muss vollständig in den VRAM passen, um effizient zu laufen</p>
+<p>Gängige GPU-VRAM-Größen:</p>
+<ul>
+<li>Consumer-GPUs (z.B. RTX 4090): 24 GB</li>
+<li>Professional GPUs (z.B. A100): 40 GB oder 80 GB</li>
+<li>High-End Datacenter GPUs (z.B. H100, H200): 80 GB bzw. 141 GB (H200)</li>
+</ul>
+<p>Die H200 mit 141 GB VRAM stellt aktuell das obere Ende des Spektrums dar und ermöglicht den Betrieb sehr großer Modelle auf einer einzelnen GPU.</p>
+<p><strong>GPU-Generationen</strong>: Neuere GPU-Generationen unterstützen moderne Datentypen und Quantisierungstechniken besser als ältere Generationen. Die Unterstützung für mache Datentypen in neueren Generationen eingeführt. Bei der Hardwareauswahl sollte daher nicht nur die VRAM-Größe, sondern auch die GPU-Generation berücksichtigt werden, da dies direkten Einfluss auf verfügbare Quantisierungsoptionen und Performance hat.</p>
+<h2 id="ressourcenverbrauch"><a class="header" href="#ressourcenverbrauch">Ressourcenverbrauch</a></h2>
+<p>Der Betrieb von LLM-Infrastruktur ist ressourcenintensiv. Die beiden Hauptfaktoren sind Kühlung und Stromverbrauch, die eng miteinander verbunden sind.</p>
+<h3 id="kühlung"><a class="header" href="#kühlung">Kühlung</a></h3>
+<p>Leistungsfähige GPUs erzeugen erhebliche Abwärme, die abgeführt werden muss, um Überhitzung und Hardware-Schäden zu verhindern. Die Wahl des Kühlungssystems hat direkten Einfluss auf Energieeffizienz und Umweltauswirkungen.</p>
+<p><strong>Luftkühlung</strong> ist der Standard bei den meisten Cloud-Providern und für lokales Hosting. Sie ist technisch einfach und zuverlässig: Ventilatoren transportieren kühle Luft an die Hardware und führen erwärmte Luft ab. Der Nachteil: Luftkühlung ist energieintensiv, da große Luftmengen bewegt werden müssen und die Kühleffizienz begrenzt ist. In Rechenzentren muss zusätzlich die Raumtemperatur reguliert werden, was den Energieaufwand weiter erhöht. Anbieter wie Hetzner setzen ausschließlich auf Luftkühlung.</p>
+<p><strong>Wasserkühlung</strong> (bzw. Flüssigkeitskühlung) ist deutlich effizienter: Wasser kann Wärme  besser transportieren als Luft bei gleichem Volumen. Moderne Flüssigkeitskühlsysteme können Abwärme direkt am Chip abführen und reduzieren den Energieaufwand für Kühlung erheblich . Allerdings ist Wasserkühlung technisch aufwändiger und teurer in der Installation. Zudem verdunstet ein Teil des Kühlwassers, was zu relevantem Wasserverbrauch führt</p>
+<p><strong>Transparenz und Nachhaltigkeit</strong>: Die Umweltauswirkungen der Kühlsysteme sind oft schwer nachvollziehbar. Life Cycle Assessments (LCAs), wie sie beispielsweise Mistral AI veröffentlicht hat, bieten einen systematischen Ansatz zur Bewertung von Energieverbrauch und Umweltauswirkungen über den gesamten Lebenszyklus – von der Hardware-Produktion über den Betrieb bis zur Entsorgung.</p>
+<h3 id="strom"><a class="header" href="#strom">Strom</a></h3>
+<p>CPU, GPU und andere Teile eines Servers, wie das Kühlungssystem, verbrauchen Strom. Besonders hoch ist der Verbrauch bei GPUs. Datacenter-GPUs haben einen erheblichen Energiebedarf, der je nach Modell und Last zwischen einigen hundert Watt bis über 700 Watt liegen kann. Der Gesamtstromverbrauch eines Systems liegt deutlich höher, da CPU, RAM, Netzwerk und Kühlung hinzukommen.</p>
+<p>Bei lokalem Hosting ist der Strompreis langfristig oft der Haupt-Kostenpunkt. Bei Cloud-Hosting sind diese Stromkosten in den Mietpreisen enthalten.</p>
+<h2 id="infrastruktur-optionen"><a class="header" href="#infrastruktur-optionen">Infrastruktur-Optionen</a></h2>
+<p>Nach der Klärung der Hardware-Anforderungen und des Ressourcenverbrauchs stellt sich die Frage: Wo wird die Infrastruktur betrieben? Es gibt grundsätzlich drei Optionen: lokal, Cloud oder hybrid.</p>
+<h3 id="lokal-on-premises"><a class="header" href="#lokal-on-premises">Lokal (On-Premises)</a></h3>
+<p>Bei lokalem Hosting wird die Hardware selbst betrieben – auf dem eigenen PC/Laptop, einem Home-Server oder in einem eigenen Rechenzentrum. Der eigenet PC oder Laptop hat jedoch keine mit in der Cloud genutzen vergleichbaren GPU</p>
+<h3 id="cloud"><a class="header" href="#cloud">Cloud</a></h3>
+<p>Cloud-Hosting bietet flexible Mietoptionen für Server bei externen Anbietern. Es lassen sich drei Modelle unterscheiden:</p>
+<p><strong>Dedicated Server</strong>: Miete dedizierter Server mit GPUs (monatlich oder stündlich). Der Server läuft kontinuierlich. Anbieter wie Hetzner oder Scaleway bieten solche Optionen in der EU an.</p>
+<p><strong>Serverless / On-Demand</strong>: Server werden nur bei Bedarf gestartet und Abrechnung erfolgt pro Minute. Ideal für sporadische Nutzung. Anbieter wie Modal oder Beam Cloud spezialisieren sich auf ML-Workloads.</p>
+<p><strong>Co-Location</strong>: Eigene Hardware wird in einem Rechenzentrum eines Providers betrieben, der Strom, Kühlung und Netzwerk bereitstellt. Kombination aus Eigentum und professioneller Infrastruktur.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="03-software.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="02-software.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="ueber.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="04-alternatives.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -194,11 +238,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="03-software.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="02-software.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="ueber.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="04-alternatives.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
@@ -211,6 +255,22 @@
         <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
         <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
         <script>

@@ -2,6 +2,14 @@
 
 LLMs lassen sich prinzipiell auf fast allen Arten von Infrastruktur betreiben – theoretisch sogar auf einem Raspberry Pi. Die praktisch erreichbare Geschwindigkeit, Modellqualität und Länge des In- und Outputs unterscheiden sich jedoch erheblich je nach Hardware. Dieses Kapitel beschreibt die Hardware-Anforderungen für LLM-Hosting, den damit verbundenen Ressourcenverbrauch und die verschiedenen Infrastruktur-Optionen von lokal bis Cloud.
 
+## Worauf wird selbst gehostet?
+
+Self-Hosting kann an verschiedenen Orten erfolgen:
+
+- **Lokal (On-Premises)**: Betrieb auf dem eigenen Laptop oder auf dedizierten Servern, die in den Räumlichkeiten einer Organisation oder Privatperson stehen. Dies bedeutet volle Kontrolle über das Setup, aber auch volle Verantwortung für Hardware und Wartung.
+- **Cloud**: Server werden in verschiedenen Formen von Cloud-Providern zur Miete angeboten – entweder als virtualisierte Maschine (VM) oder als dedizierte physische Maschine (Bare Metal). Flexibel skalierbar, aber mit laufenden Kosten.
+- **Hybrid (Co-Hosting)**: Kauf eigener Server, die jedoch in den Räumen eines Cloud-Providers betrieben und gewartet werden. Kombination aus Eigentum und professioneller Infrastruktur.
+
 ## Hardware-Anforderungen
 
 ### CPU vs GPU

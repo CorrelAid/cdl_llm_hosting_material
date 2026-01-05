@@ -8,7 +8,7 @@ class MDBookSidebarScrollbox extends HTMLElement {
         super();
     }
     connectedCallback() {
-        this.innerHTML = '<ol class="chapter"><li class="chapter-item expanded "><span class="chapter-link-wrapper"><a href="00-introduction.html"><strong aria-hidden="true">1.</strong> Einleitung, Überblick und Definitionen</a></span></li><li class="chapter-item expanded "><span class="chapter-link-wrapper"><a href="01-models.html"><strong aria-hidden="true">2.</strong> Open LLMs</a></span></li><li class="chapter-item expanded "><span class="chapter-link-wrapper"><a href="02-infra.html"><strong aria-hidden="true">3.</strong> Hosting-Infrastruktur</a></span></li><li class="chapter-item expanded "><span class="chapter-link-wrapper"><a href="03-software.html"><strong aria-hidden="true">4.</strong> Hosting-Software</a></span></li><li class="chapter-item expanded "><span class="chapter-link-wrapper"><a href="03-alternatives.html"><strong aria-hidden="true">5.</strong> Alternativen und Vergleich</a></span></li><li class="chapter-item expanded "><span class="chapter-link-wrapper"><a href="ueber.html">Über das Material</a></span></li></ol>';
+        this.innerHTML = '<ol class="chapter"><li class="chapter-item expanded "><span class="chapter-link-wrapper"><a href="00-introduction.html"><strong aria-hidden="true">1.</strong> Einleitung, Überblick und Definitionen</a></span></li><li class="chapter-item expanded "><span class="chapter-link-wrapper"><a href="01-models.html"><strong aria-hidden="true">2.</strong> Open LLMs</a></span></li><li class="chapter-item expanded "><span class="chapter-link-wrapper"><a href="02-software.html"><strong aria-hidden="true">3.</strong> Was wird selbst gehosted?</a></span></li><li class="chapter-item expanded "><span class="chapter-link-wrapper"><a href="03-infra.html"><strong aria-hidden="true">4.</strong> Worauf wird gehosted?</a></span></li><li class="chapter-item expanded "><span class="chapter-link-wrapper"><a href="04-alternatives.html"><strong aria-hidden="true">5.</strong> Alternativen und Vergleich</a></span></li><li class="chapter-item expanded "><span class="chapter-link-wrapper"><a href="ueber.html">Über das Material</a></span></li><li class="chapter-item expanded "><span class="chapter-link-wrapper"><a href="bibliography.html">Literaturverzeichnis</a></span></li></ol>';
         // Set the current, active page, and reveal it if it's hidden
         let current_page = document.location.href.toString().split('#')[0].split('?')[0];
         if (current_page.endsWith('/')) {
@@ -40,14 +40,22 @@ class MDBookSidebarScrollbox extends HTMLElement {
         // Track and set sidebar scroll position
         this.addEventListener('click', e => {
             if (e.target.tagName === 'A') {
-                sessionStorage.setItem('sidebar-scroll', this.scrollTop);
+                const clientRect = e.target.getBoundingClientRect();
+                const sidebarRect = this.getBoundingClientRect();
+                sessionStorage.setItem('sidebar-scroll-offset', clientRect.top - sidebarRect.top);
             }
         }, { passive: true });
-        const sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
-        sessionStorage.removeItem('sidebar-scroll');
-        if (sidebarScrollTop) {
+        const sidebarScrollOffset = sessionStorage.getItem('sidebar-scroll-offset');
+        sessionStorage.removeItem('sidebar-scroll-offset');
+        if (sidebarScrollOffset !== null) {
             // preserve sidebar scroll position when navigating via links within sidebar
-            this.scrollTop = sidebarScrollTop;
+            const activeSection = this.querySelector('.active');
+            if (activeSection) {
+                const clientRect = activeSection.getBoundingClientRect();
+                const sidebarRect = this.getBoundingClientRect();
+                const currentOffset = clientRect.top - sidebarRect.top;
+                this.scrollTop += currentOffset - parseFloat(sidebarScrollOffset);
+            }
         } else {
             // scroll sidebar to current active section when navigating via
             // 'next/previous chapter' buttons

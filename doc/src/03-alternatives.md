@@ -1,1 +1,0 @@
-# Alternativen und Vergleich

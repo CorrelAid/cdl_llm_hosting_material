@@ -8,6 +8,10 @@ language = "en"
 [preprocessor.mermaid]
 command = "mdbook-mermaid"
 
+[preprocessor.bib]
+bibliography = "bibliography.bib"
+title = "Literaturverzeichnis"
+
 [output]
 
 [output.html]

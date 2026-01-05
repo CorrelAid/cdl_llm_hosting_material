@@ -35,10 +35,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3d607139.js";
+            window.path_to_searchindex_js = "searchindex-ad046a64.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-29b41a76.js"></script>
+        <script src="toc-64f8deb7.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -176,70 +176,25 @@
                     <main>
                         <h1 id="einleitung-überblick-und-definitionen"><a class="header" href="#einleitung-überblick-und-definitionen">Einleitung, Überblick und Definitionen</a></h1>
 <p>Dieses Material entstand auf der Grundlage eines Vortrags<sup class="footnote-reference" id="fr-1-1"><a href="#footnote-1">1</a></sup> über Self-Hosting von LLMs, der auf dem <a href="https://www.youtube.com/watch?v=exOeJCLcuHQ">Datenfestival</a> des <a href="https://civic-data.de/">Civic Data Lab</a> gehalten wurde. Es soll den Vortrag zugänglicher machen, umfassend über das Thema informieren und einen praxisorientierten Überblick geben.</p>
-<p>Unter Self-Hosting wird der (auf unterschiedlichen Leveln) eigenständige Betrieb von Infrastruktur verstanden, auf der in diesem Fall LLMs und mit diesen zusammenhängende Software läuft.</p>
-<h2 id="was-ist-ein-llm"><a class="header" href="#was-ist-ein-llm">Was ist ein LLM?</a></h2>
-<p>LLMs (Large Language Models) sind große neuronale Sprachmodelle. Sie basieren auf neuronalen Netzwerken – mathematischen Strukturen, die aus vielen miteinander verbundenen Schichten bestehen. Diese Modelle werden durch die Anpassung von Millionen oder sogar Milliarden von Parametern trainiert, die zusammen mit der Modellarchitektur das fertige Modell definieren.</p>
-<p>Die Textgenerierung erfolgt durch zahlreiche Matrizenrechnungen, die sich besonders effizient auf spezialisierter Hardware wie GPUs ausführen lassen. <strong>Open-Weight-Modelle</strong> sind als Dateien verfügbar, die sowohl die Architektur als auch die trainierten Parameter eines Modells enthalten – sie können daher selbst gehostet werden.</p>
+<p>Unter Self-Hosting wird der (auf unterschiedlichen Leveln) eigenständige Betrieb von Infrastruktur verstanden, auf der in diesem Fall LLMs und mit diesen zusammenhängenden Software läuft.</p>
 <h2 id="warum-self-hosting"><a class="header" href="#warum-self-hosting">Warum Self-Hosting?</a></h2>
-<p>Die Nutzung proprietärer LLM-Dienste ist mit  <strong>Abhängigkeiten</strong>, <strong>Intransparenz</strong> und mangelnder <strong>Kontrolle</strong> verbunden. Bei kommerziellen Anbietern bleibt unklar, wie Daten tatsächlich verarbeitet werden, wie die Modelle trainiert wurden und welche Eigenschaften sie besitzen. Auch die Funktionsweise eingebundener Tools wie Websuche sowie der tatsächliche Ressourcenverbrauch sind nicht nachvollziehbar. Self-Hosting adressiert diese Problematik und trägt zur <strong>digitalen Souveränität</strong> bei: Organisationen und Privatpersonen erlangen vollständige Transparenz und Kontrolle über alle Aspekte des LLM-Betriebs – von der Datenverarbeitung über die Modellauswahl bis hin zum Energie- und Ressourcenverbrauch.</p>
-<h2 id="worauf-wird-selbst-gehostet"><a class="header" href="#worauf-wird-selbst-gehostet">Worauf wird selbst gehostet?</a></h2>
-<p>Self-Hosting kann an verschiedenen Orten erfolgen:</p>
-<ul>
-<li><strong>Lokal (On-Premises)</strong>: Betrieb auf dem eigenen Laptop oder auf dedizierten Servern, die in den Räumlichkeiten einer Organisation oder Privatperson stehen. Dies bedeutet volle Kontrolle über das Setup, aber auch volle Verantwortung für Hardware und Wartung.</li>
-<li><strong>Cloud</strong>: Server werden in verschiedenen Formen von Cloud-Providern zur Miete angeboten – entweder als virtualisierte Maschine (VM) oder als dedizierte physische Maschine (Bare Metal). Flexibel skalierbar, aber mit laufenden Kosten.</li>
-<li><strong>Hybrid (Co-Hosting)</strong>: Kauf eigener Server, die jedoch in den Räumen eines Cloud-Providers betrieben und gewartet werden. Kombination aus Eigentum und professioneller Infrastruktur.</li>
-</ul>
-<h2 id="was-wird-selbst-gehostet"><a class="header" href="#was-wird-selbst-gehostet">Was wird selbst gehostet?</a></h2>
-<p>Im Falle des Self-Hostings von LLM-Systemen stellt sich die Frage, welche Komponenten man selbst betreiben will. Hier lässt sich zwischen <strong>Frontend</strong> und <strong>Backend</strong> unterscheiden:</p>
-<p><strong>Frontend</strong>: Meistens ein Chat Interface, über das Nutzer:innen mit dem LLM interagieren.</p>
-<p><strong>Backend</strong>: Umfasst mehrere Komponenten:</p>
-<ul>
-<li><strong>Inference-Server</strong>: Software, auf der ein LLM betrieben wird. Auf solchen Servern können sowohl generative LLMs als auch Embedding-Modelle betrieben werden.</li>
-<li><strong>Vektor-Datenbank</strong>: Wird für RAG (Retrieval-Augmented Generation) benötigt. RAG ergänzt informationsbezogene Anfragen an das LLM mit relevanten Dokumenten aus einem Suchschritt mithilfe einer Datenbank.</li>
-<li><strong>API Gateway</strong>: Verwaltet und standardisiert den Zugriff auf die verschiedenen Backend-Dienste</li>
-<li>Zusätzliche Dienste wie Authentifizierung und Dateipeicher</li>
-</ul>
-<p><strong>RAG im Detail</strong>: Bei RAG wird semantische Suche verwendet. Dabei verarbeitet ein Embedding-Modell Texte zu sogenannten Embeddings. Embeddings sind Vektore, die den Textinhalt in numerischer Form repräsentieren. Diese Embeddings ermöglichen es, inhaltlich ähnliche Dokumente zu finden und dem LLM als Kontext bereitzustellen.</p>
-<p><strong>Fig. 1</strong> bietet einen graphischen Überblick über die Komponenten und deren Zusammenspiel:</p>
-<pre class="mermaid">flowchart TB
-    subgraph Frontend
-        UI[Chat Interface]
-    end
-
-    subgraph Backend
-        direction TB
-        subgraph InferenceLayer[Inference Layer]
-            LLMServer[Inference-Server für LLM]
-            EmbedServer[Inference-Server für Embedding-Modell]
-        end
-
-        subgraph DataStorage[Datenschicht]
-            VectorDB[(Vektor-Datenbank)]
-        end
-
-        subgraph Additional[Zusätzliche Komponenten]
-            Tools[Tools]
-            Gateway[API Gateway]
-        end
-    end
-
-    UI --&gt;|Anfragen| Gateway
-    Gateway --&gt;|Routen| LLMServer
-
-    UI -.-&gt;|RAG Workflow| LLMServer
-    LLMServer -.-&gt;|Suchanfrage| EmbedServer
-    EmbedServer -.-&gt;|Embeddings| VectorDB
-    VectorDB -.-&gt;|Relevante Dokumente| LLMServer
-
-    Tools --&gt;|Erweiterte Funktionen| LLMServer
-</pre>
-
+<p>Die Nutzung proprietärer LLM-Dienste ist mit <strong>Abhängigkeiten</strong>, <strong>Intransparenz</strong> und mangelnder <strong>Kontrolle</strong> verbunden. Bei kommerziellen Anbietern bleibt unklar, wie Daten tatsächlich verarbeitet werden, wie die Modelle trainiert wurden und welche Eigenschaften sie besitzen. Auch die Funktionsweise eingebundener Tools wie Websuche sowie der tatsächliche Ressourcenverbrauch sind nicht nachvollziehbar. Self-Hosting adressiert diese Problematik und trägt zur <strong>digitalen Souveränität</strong> bei: Organisationen und Privatpersonen erlangen, je nach Art des Selfhostings, mehr Transparenz und Kontrolle über den LLM-Betrieb – von der Datenverarbeitung über die Modellauswahl bis hin zum Energie- und Ressourcenverbrauch.</p>
 <h2 id="aufbau-der-dokumentation"><a class="header" href="#aufbau-der-dokumentation">Aufbau der Dokumentation</a></h2>
-<p>Die folgenden Kapitel vertiefen die hier eingeführten Konzepte systematisch:</p>
-<p><strong><a href="./01-models.html">Open LLMs</a></strong> erklärt den Unterschied zwischen Open-Weight- und Open-Source-Modellen, gibt einen Überblick über Lizenzmodelle und deren Implikationen, erläutert Quantisierung als zentrale Optimierungstechnik, stellt Hugging Face als primäre Bezugsquelle vor und beschreibt gängige Metriken und Benchmarks zur Modellbewertung.</p>
-<p><strong><a href="./02-infra.html">Hosting-Infrastruktur</a></strong> vergleicht detailliert die verschiedenen Infrastrukturoptionen – von lokalen Servern über Cloud-Lösungen bis zu hybriden Ansätzen. Das Kapitel behandelt Hardware-Anforderungen (CPU vs. GPU, VRAM-Größen, GPU-Generationen) sowie Aspekte wie Energieeffizienz, Kühlungssysteme und langfristige Kostenbetrachtungen.</p>
-<p><strong><a href="./03-software.html">Hosting-Software</a></strong> stellt konkrete Software-Komponenten für die verschiedenen Teile eines LLM-Systems vor – von Inference-Servern über Chat-Interfaces bis zu API-Gateways und Vektor-Datenbanken. Als praktisches Beispiel wird Parrotpark vorgestellt, ein vollständiges self-gehostetes LLM-System, das die Integration verschiedener Open-Source-Komponenten demonstriert.</p>
-<p><strong><a href="./03-alternatives.html">Alternativen</a></strong> diskutiert abschließend Alternativen zum vollständigen Self-Hosting, einschließlich hybrider Ansätze und kommerzieller Lösungen mit verschiedenen Compliance-Leveln.</p>
+<p>Im Verlaufe dieses Materials wird aufeinander aufbauend in eine Reihe von Aspekten des Self-Hostings von LLMs eingeführt:</p>
+<ul>
+<li>
+<p>Im <a href="./01-models.html">1. Kapitel</a> wird sich zunächst mit LLMs an sich beschäftigt. Was ist das überhaupt? Das Kapitel enthält Erläuterungen zu LLMs an sich. Was verstehen wir darunter? Es erklärt außerdem den Unterschied zwischen Open-Weight- und Open-Source-Modellen, gibt einen Überblick über Lizenzmodelle und deren Implikationen, erläutert Quantisierung als zentrale Optimierungstechnik, stellt Hugging Face als primäre Bezugsquelle vor und beschreibt gängige Metriken und Benchmarks zur Modellbewertung.</p>
+</li>
+<li>
+<p>Im <a href="./02-software.html">2. Kapitel</a> werden die Fragen beantwortet: Was wird selbst gehostet, wie werden LLMs betrieben und welche Komponenten werden außer dem LLM benötigt? Hier werden  konkrete Software-Komponenten für die verschiedenen Teile eines LLM-Systems vorgestellt. Von Inference-Servern über Chat-Interfaces bis zu API-Gateways und Vektor-Datenbanken. Als praktisches Beispiel wird Parrotpark vorgestellt, ein vollständiges self-gehostetes LLM-System, das die Integration verschiedener Open-Source-Komponenten demonstriert.</p>
+</li>
+<li>
+<p>Das <a href="(./02-infra.html">3. Kapitel</a> beantwortet die Frage: Worauf wird selbst gehostet? Das Kapitel enthält einen Vergleich zwischen den verschiedenen Infrastrukturoptionen. Außerdem behandelt das Kapitel  Hardware-Anforderungen (CPU vs. GPU, VRAM-Größen, GPU-Generationen) sowie Aspekte wie Ressourcenverbrauch und langfristige Kostenbetrachtungen.</p>
+</li>
+<li>
+<p>In <a href="(./03-alternatives.html">Kapitel 4</a> werden Alternativen zum vollständigen Self-Hosting, einschließlich hybrider Ansätze und kommerzieller Lösungen mit verschiedenen Compliance-Leveln vorgestellt.</p>
+</li>
+</ul>
 <hr>
 <ol class="footnote-definition">
 <li id="footnote-1">
@@ -276,6 +231,22 @@
         <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
         <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
         <script>

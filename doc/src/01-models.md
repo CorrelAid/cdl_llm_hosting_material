@@ -1,14 +1,22 @@
 # Open LLMs
 
-Für das Self-Hosting von LLMs stehen zahlreiche Modelle zur Verfügung. Dieses Kapitel gibt einen Überblick über die wichtigsten Aspekte bei der Auswahl und Bewertung von Modellen: von Lizenzfragen über technische Optimierungen bis hin zu Bezugsquellen und Bewertungsmetriken.
+## Was ist ein LLM?
 
-## Open vs Open Source
+LLMs (Large Language Models) sind große neuronalen Netzwerke. Das ist eine Struktur aus vielen miteinander verbundene Schichten aus Modellen biologischer Neuronen (basierend auf dem, was 1943 über Neuronen bekannt war) {{#cite mcculloch_logical_1943}}. Die Neuronen führen einzelne Rechnungen aus, bei denen konfigurierbare Parameter verwendet werden. Beim Training dieser Modelle werden Millionen oder sogar Milliarden dieser Parametern nach und nach angepasst, bis der Output des Modells den Trainingsdaten entspricht. 
 
-Im Kontext von Large Language Models wird häufig von "Open-Source-Modellen" gesprochen, obwohl die meisten dieser Modelle technisch gesehen **Open-Weight-Modelle** sind. Der Unterschied ist wichtig:
+Die bekanntesten LLMs sind **generativ**, haben also als Input und als Output Text. Andere LLMs haben als Output Zahlen in Form von Vektoren, der den Text-Input semantisch repräsentieren soll, sogenannte **Embeddings**.
 
-**Open-Weight-Modelle** stellen die trainierten Modellparameter (Weights) öffentlich zur Verfügung. Nutzer:innen können diese Modelle herunterladen, ausführen und für eigene Zwecke verwenden. Allerdings sind oft weder die Trainingsdaten noch der vollständige Trainingscode verfügbar. Beispiele: Llama (Meta), Mistral (Mistral AI), Qwen (Alibaba).
+Generell wird der Output hergestellt durch zahlreiche Matrizenrechnungen, die sich besonders effizient auf spezialisierter Hardware wie GPUs (Graphics Processing Unit/Grafikkarten) ausführen lassen, da sie dort in großer Zahl gleichzeitig passieren können. 
 
-**Open-Source-Modelle** im engeren Sinne gehen weiter: Sie veröffentlichen nicht nur die Modellparameter, sondern auch die Trainingsdaten, den Trainingscode und die gesamte Entwicklungspipeline. Dies ermöglicht vollständige Reproduzierbarkeit und Transparenz. Beispiele: OLMo (Allen Institute for AI), Pythia (EleutherAI).
+**Open-Weight-Modelle** sind als Dateien verfügbar, die sowohl die Architektur als auch die trainierten Parameter eines Modells enthalten und selbst gehostet werden können. Für das Self-Hosting von LLMs stehen zahlreiche solcher Modelle zur Verfügung. Dieses Kapitel gibt einen Überblick über die wichtigsten Aspekte bei der Auswahl und Bewertung von Modellen: von Lizenzfragen über technische Optimierungen bis hin zu Bezugsquellen und Bewertungsmetriken.
+
+## Open Weight vs. Open Source
+
+Im Kontext von Large Language Models wird häufig von Open-Source-Modellen gesprochen, obwohl die meisten dieser Modelle technisch gesehen Open-Weight-Modelle (hier auch Open Modelle genannt) sind. Der Unterschied mag unwichtig klingen, hat jedoch Bedeutung für die Einordnung dessen, was die Urheber der LLMs wirklich bereitstellen:
+
+- **Open-Weight-Modelle** stellen die trainierten Modellparameter (Weights) öffentlich zur Verfügung. Nutzer:innen können diese Modelle herunterladen, ausführen und für eigene Zwecke verwenden. Allerdings sind oft weder die Trainingsdaten noch der vollständige Trainingscode verfügbar. Beispiele: Llama (Meta), Mistral (Mistral AI), Qwen (Alibaba).
+
+- **Open-Source-Modelle** im engeren Sinne gehen weiter: Sie veröffentlichen nicht nur die Modellparameter, sondern auch die Trainingsdaten, den Trainingscode und die gesamte Entwicklungspipeline. Dies ermöglicht vollständige Reproduzierbarkeit und Transparenz. Beispiele: OLMo (Allen Institute for AI), Pythia (EleutherAI).
 
 Für Self-Hosting sind beide Varianten geeignet, wobei Open-Weight-Modelle deutlich verbreiteter sind. Die Wahl zwischen beiden hängt davon ab, wie wichtig vollständige Transparenz und Reproduzierbarkeit für den jeweiligen Anwendungsfall sind.
 
@@ -18,12 +26,11 @@ Die Lizenzen von LLMs unterscheiden sich erheblich und haben direkten Einfluss d
 
 **Permissive Lizenzen** (z.B. Apache 2.0, MIT): Erlauben kommerzielle Nutzung, Modifikation und Weiterverbreitung mit minimalen Einschränkungen. Beispiele: Mistral-Modelle, Qwen-Modelle.
 
-**Restriktive Community-Lizenzen**: Erlauben Nutzung und Modifikation, schränken aber kommerzielle Nutzung ein oder verlangen Lizenzgebühren ab einer bestimmten Nutzerzahl. Beispiel: Llama-Modelle haben eine Custom-Lizenz [@meta_llama4_policy], die bei über 700 Millionen monatlichen Nutzern eine separate Vereinbarung erfordert.
+**Restriktive Community-Lizenzen**: Erlauben Nutzung und Modifikation, schränken aber kommerzielle Nutzung ein oder verlangen Lizenzgebühren ab einer bestimmten Nutzerzahl. Beispiel: Llama-Modelle haben eine Custom-Lizenz[^1], die bei über 700 Millionen monatlichen Nutzern eine separate Vereinbarung erfordert.
 
 **Research-Only-Lizenzen**: Beschränken die Nutzung auf nicht-kommerzielle Forschungszwecke. Solche Modelle eignen sich nicht für produktive Self-Hosting-Szenarien.
 
 
-Manche Lizenzen unterscheiden sich auch je nach Land der Nutzer:in. So verbietet Meta die Nutzung von Llama in der EU.
 Vor dem Einsatz eines Modells sollte die Lizenz sorgfältig geprüft werden, insbesondere bei kommerzieller Nutzung oder bei Organisationen mit vielen Nutzer:innen. Die Lizenzen sind in der Regel auf den Modell-Seiten bei Hugging Face oder auf den Websites der Entwickler dokumentiert.
 
 ## Quantisierung
